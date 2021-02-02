@@ -56,15 +56,39 @@
 		CEE9DAC425C9CD0A005569B2 /* Check-Weather */ = {
 			isa = PBXGroup;
 			children = (
+				CEE9DADE25C9CD6A005569B2 /* Model */,
+				CEE9DADD25C9CD5E005569B2 /* View */,
+				CEE9DADB25C9CD4D005569B2 /* Controller */,
 				CEE9DAC525C9CD0A005569B2 /* AppDelegate.swift */,
 				CEE9DAC725C9CD0A005569B2 /* SceneDelegate.swift */,
-				CEE9DAC925C9CD0A005569B2 /* ViewController.swift */,
-				CEE9DACB25C9CD0A005569B2 /* Main.storyboard */,
 				CEE9DACE25C9CD0B005569B2 /* Assets.xcassets */,
 				CEE9DAD025C9CD0B005569B2 /* LaunchScreen.storyboard */,
 				CEE9DAD325C9CD0B005569B2 /* Info.plist */,
 			);
 			path = "Check-Weather";
+			sourceTree = "<group>";
+		};
+		CEE9DADB25C9CD4D005569B2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				CEE9DAC925C9CD0A005569B2 /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		CEE9DADD25C9CD5E005569B2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CEE9DACB25C9CD0A005569B2 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		CEE9DADE25C9CD6A005569B2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,6 +313,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5PWFYS8K96;
 				INFOPLIST_FILE = "Check-Weather/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -308,6 +333,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5PWFYS8K96;
 				INFOPLIST_FILE = "Check-Weather/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
