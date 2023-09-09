@@ -1,13 +1,14 @@
 //
 //  AppDelegate.swift
-//  Check-Weather
+//  Clima
 //
-//  Created by James Mbugua on 02/02/2021.
+//  Created by Angela Yu on 01/09/2019.
+//  Copyright © 2019 App Brewery. All rights reserved.
 //
 
 import UIKit
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 

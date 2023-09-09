@@ -13,7 +13,7 @@ Application Functions:
 - 10 Days Weather History 
 
 Screenshots
-------------
+-----------
 ScreenShot-1.
 
 
