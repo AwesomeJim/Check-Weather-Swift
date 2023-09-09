@@ -16,6 +16,11 @@
 		E33E8F6B2AAC6F1400A78667 /* Readme.md in Resources */ = {isa = PBXBuildFile; fileRef = E33E8F6A2AAC6F1400A78667 /* Readme.md */; };
 		E33E8F6E2AAC720C00A78667 /* dark_background.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E33E8F6C2AAC720C00A78667 /* dark_background.pdf */; };
 		E33E8F6F2AAC720C00A78667 /* light_background.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E33E8F6D2AAC720C00A78667 /* light_background.pdf */; };
+		E33E8F712AACA73F00A78667 /* WeatherManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F702AACA73F00A78667 /* WeatherManager.swift */; };
+		E33E8F742AACA9D500A78667 /* ConstantsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F732AACA9D500A78667 /* ConstantsEnum.swift */; };
+		E33E8F762AACAA4200A78667 /* NetworkUtilsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F752AACAA4200A78667 /* NetworkUtilsEnum.swift */; };
+		E33E8F792AACABED00A78667 /* OpenWeatherApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F782AACABED00A78667 /* OpenWeatherApiClient.swift */; };
+		E33E8F7C2AACADD400A78667 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F7B2AACADD400A78667 /* NetworkUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +35,12 @@
 		E33E8F6A2AAC6F1400A78667 /* Readme.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = Readme.md; sourceTree = "<group>"; };
 		E33E8F6C2AAC720C00A78667 /* dark_background.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = dark_background.pdf; sourceTree = "<group>"; };
 		E33E8F6D2AAC720C00A78667 /* light_background.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = light_background.pdf; sourceTree = "<group>"; };
+		E33E8F702AACA73F00A78667 /* WeatherManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherManager.swift; sourceTree = "<group>"; };
+		E33E8F732AACA9D500A78667 /* ConstantsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsEnum.swift; sourceTree = "<group>"; };
+		E33E8F752AACAA4200A78667 /* NetworkUtilsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtilsEnum.swift; sourceTree = "<group>"; };
+		E33E8F782AACABED00A78667 /* OpenWeatherApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherApiClient.swift; sourceTree = "<group>"; };
+		E33E8F7B2AACADD400A78667 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
+		E33E8F7D2AACBE7500A78667 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,8 +74,10 @@
 		CEE9DAC425C9CD0A005569B2 /* Check-Weather */ = {
 			isa = PBXGroup;
 			children = (
+				E33E8F7D2AACBE7500A78667 /* Config.xcconfig */,
 				E33E8F6C2AAC720C00A78667 /* dark_background.pdf */,
 				E33E8F6D2AAC720C00A78667 /* light_background.pdf */,
+				E33E8F722AACA9AB00A78667 /* Constants */,
 				E33E8F692AAC6E3800A78667 /* Model */,
 				CEE9DADD25C9CD5E005569B2 /* View */,
 				CEE9DADB25C9CD4D005569B2 /* Controller */,
@@ -96,8 +109,28 @@
 		E33E8F692AAC6E3800A78667 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E33E8F772AACAB8000A78667 /* Network */,
+				E33E8F702AACA73F00A78667 /* WeatherManager.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		E33E8F722AACA9AB00A78667 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				E33E8F732AACA9D500A78667 /* ConstantsEnum.swift */,
+				E33E8F752AACAA4200A78667 /* NetworkUtilsEnum.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		E33E8F772AACAB8000A78667 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				E33E8F782AACABED00A78667 /* OpenWeatherApiClient.swift */,
+				E33E8F7B2AACADD400A78667 /* NetworkUtils.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -173,8 +206,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E33E8F7C2AACADD400A78667 /* NetworkUtils.swift in Sources */,
+				E33E8F742AACA9D500A78667 /* ConstantsEnum.swift in Sources */,
+				E33E8F762AACAA4200A78667 /* NetworkUtilsEnum.swift in Sources */,
 				CEE9DAC625C9CD0A005569B2 /* AppDelegate.swift in Sources */,
+				E33E8F792AACABED00A78667 /* OpenWeatherApiClient.swift in Sources */,
 				E33E8F682AAC6E2900A78667 /* WeatherViewController.swift in Sources */,
+				E33E8F712AACA73F00A78667 /* WeatherManager.swift in Sources */,
 				CEE9DAC825C9CD0A005569B2 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -203,6 +241,7 @@
 /* Begin XCBuildConfiguration section */
 		CEE9DAD425C9CD0B005569B2 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E33E8F7D2AACBE7500A78667 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -264,6 +303,7 @@
 		};
 		CEE9DAD525C9CD0B005569B2 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E33E8F7D2AACBE7500A78667 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

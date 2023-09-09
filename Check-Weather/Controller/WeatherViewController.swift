@@ -16,10 +16,12 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var searchTextField: UITextField!
     
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        searchTextField.delegate = self // report back to viewController via callback
+        searchTextField.delegate = self // report back to viewController via delegate callbacks
     }
 
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -34,12 +36,14 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let searchLocation = searchTextField.text else {
-            //searchTextField.er
+        guard let cityName = searchTextField.text else {
+            searchTextField.placeholder = "Please type location"
             return
         }
-        print(searchLocation)
+        print(cityName)
         searchTextField.text = ""
+        let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
+        OpenWeatherApiClient.fetchWeather(cityName: trimmed)
     }
     
     
