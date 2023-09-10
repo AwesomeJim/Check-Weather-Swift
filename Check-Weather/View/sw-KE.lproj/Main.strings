@@ -1,0 +1,15 @@
+
+/* Class = "UITextField"; placeholder = "Search"; ObjectID = "2eh-wL-W34"; */
+"2eh-wL-W34.placeholder" = "Search";
+
+/* Class = "UILabel"; text = "London"; ObjectID = "CWP-r8-Jsy"; */
+"CWP-r8-Jsy.text" = "London";
+
+/* Class = "UILabel"; text = "C"; ObjectID = "MHH-vY-Mrb"; */
+"MHH-vY-Mrb.text" = "C";
+
+/* Class = "UILabel"; text = "°"; ObjectID = "N7Y-Fj-S2q"; */
+"N7Y-Fj-S2q.text" = "°";
+
+/* Class = "UILabel"; text = "21"; ObjectID = "w9o-tW-03D"; */
+"w9o-tW-03D.text" = "21";

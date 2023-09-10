@@ -1,0 +1,66 @@
+/* 
+  Localizable.strings
+  Check-Weather
+
+  Created by Awesome Jim on 10/09/2023.
+  
+*/
+
+
+//-- Weather Conditions (From OpenWeatherMap)
+"condition_2xx" = "Storm";
+"condition_3xx" = "Drizzle";
+"condition_500" = "Light Rain";
+"condition_501" = "Moderate Rain";
+"condition_502" = "Heavy Rain";
+"condition_503" = "Intense Rain";
+"condition_504" = "Extreme Rain";
+"condition_511" = "Freezing Rain";
+"condition_520" = "Light Shower";
+"condition_521" = "Shower";
+"condition_522" = "Heavy Shower";
+"condition_531" = "Ragged Shower";
+"condition_600" = "Light Snow";
+"condition_601" = "Snow";
+"condition_602" = "Heavy Snow";
+"condition_611" = "Sleet";
+"condition_612" = "Shower Sleet";
+"condition_615" = "Rain and Snow";
+"condition_616" = "Rain and Snow";
+"condition_620" = "Shower Snow";
+"condition_621" = "Shower Snow";
+"condition_622" = "Shower Snow";
+"condition_701" = "Mist";
+"condition_711" = "Smoke";
+"condition_721" = "Haze";
+"condition_731" = "Sand, Dust";
+"condition_741" = "Fog";
+"condition_751" = "Sand";
+"condition_761" = "Dust";
+"condition_762" = "Volcanic Ash";
+"condition_771" = "Squalls";
+"condition_781" = "Tornado";
+"condition_800" = "Clear";
+"condition_801" = "Mostly Clear";
+"condition_802" = "Scattered Clouds";
+"condition_803" = "Broken Clouds";
+"condition_804" = "Overcast Clouds";
+"condition_900" = "Tornado";
+"condition_901" = "Tropical Storm";
+"condition_902" = "Hurricane";
+"condition_903" = "Cold";
+"condition_904" = "Hot";
+"condition_905" = "Windy";
+"condition_906" = "Hail";
+"condition_951" = "Calm";
+"condition_952" = "Light Breeze";
+"condition_953" = "Gentle Breeze";
+"condition_954" = "Breeze";
+"condition_955" = "Fresh Breeze";
+"condition_956" = "Strong Breeze";
+"condition_957" = "High Wind";
+"condition_958" = "Gale";
+"condition_959" = "Severe Gale";
+"condition_960" = "Storm";
+"condition_961" = "Violent Storm";
+"condition_962" = "Hurricane";

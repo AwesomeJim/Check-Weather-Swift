@@ -59,10 +59,26 @@ class OpenWeatherApiClient {
         //2. Create a URL Session
         let session = URLSession(configuration: .default)
         
-        //       //3. Give the session a task
-        //       let task = session.dataTask(with: url, completionHandler: <#T##(Data?, URLResponse?, Error?) -> Void#>)
-        //
-        //       //4. Start the Task
-        //       task.resume()
+        //3. Give the session a task
+        let task = session.dataTask(with: url, completionHandler: handle(data: respose:  error:))
+        
+        //4. Start the Task
+        task.resume()
+    }
+    
+     class func handle(data:Data?, respose: URLResponse?, error:Error?) {
+         if error != nil {
+             print(error)
+             return
+         }
+         let weatherCondition = WeatherUtils.getStringForWeatherCondition(weatherId: 802)
+         let wind = WeatherUtils.getFormattedWind(windSpeed: 2.17, degrees: 130)
+         print("\(weatherCondition)  and wind speed is \(wind)")
+         
+         if let safeData = data {
+             let dataString = String(data: safeData, encoding: .utf8)
+             print(dataString)
+         }
+        
     }
 }
