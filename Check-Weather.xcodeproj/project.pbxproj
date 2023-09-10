@@ -21,7 +21,7 @@
 		E33E8F762AACAA4200A78667 /* NetworkUtilsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F752AACAA4200A78667 /* NetworkUtilsEnum.swift */; };
 		E33E8F792AACABED00A78667 /* OpenWeatherApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F782AACABED00A78667 /* OpenWeatherApiClient.swift */; };
 		E33E8F7C2AACADD400A78667 /* NetworkUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F7B2AACADD400A78667 /* NetworkUtils.swift */; };
-		E33E8F7F2AACD6FC00A78667 /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F7E2AACD6FC00A78667 /* Response.swift */; };
+		E33E8F7F2AACD6FC00A78667 /* ResponseModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F7E2AACD6FC00A78667 /* ResponseModels.swift */; };
 		E33E8F812AAD952C00A78667 /* OpenWeatherJsonUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F802AAD952C00A78667 /* OpenWeatherJsonUtils.swift */; };
 		E33E8F832AAD981100A78667 /* WeatherUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F822AAD981100A78667 /* WeatherUtils.swift */; };
 		E33E8F882AAD9CAE00A78667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E33E8F8A2AAD9CAE00A78667 /* Localizable.strings */; };
@@ -46,7 +46,7 @@
 		E33E8F782AACABED00A78667 /* OpenWeatherApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherApiClient.swift; sourceTree = "<group>"; };
 		E33E8F7B2AACADD400A78667 /* NetworkUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkUtils.swift; sourceTree = "<group>"; };
 		E33E8F7D2AACBE7500A78667 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
-		E33E8F7E2AACD6FC00A78667 /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		E33E8F7E2AACD6FC00A78667 /* ResponseModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModels.swift; sourceTree = "<group>"; };
 		E33E8F802AAD952C00A78667 /* OpenWeatherJsonUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenWeatherJsonUtils.swift; sourceTree = "<group>"; };
 		E33E8F822AAD981100A78667 /* WeatherUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherUtils.swift; sourceTree = "<group>"; };
 		E33E8F892AAD9CAE00A78667 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 			children = (
 				E33E8F782AACABED00A78667 /* OpenWeatherApiClient.swift */,
 				E33E8F7B2AACADD400A78667 /* NetworkUtils.swift */,
-				E33E8F7E2AACD6FC00A78667 /* Response.swift */,
+				E33E8F7E2AACD6FC00A78667 /* ResponseModels.swift */,
 				E33E8F802AAD952C00A78667 /* OpenWeatherJsonUtils.swift */,
 				E33E8F822AAD981100A78667 /* WeatherUtils.swift */,
 			);
@@ -237,7 +237,7 @@
 				E33E8F762AACAA4200A78667 /* NetworkUtilsEnum.swift in Sources */,
 				E33E8F8E2AADC51600A78667 /* AppUtils.swift in Sources */,
 				CEE9DAC625C9CD0A005569B2 /* AppDelegate.swift in Sources */,
-				E33E8F7F2AACD6FC00A78667 /* Response.swift in Sources */,
+				E33E8F7F2AACD6FC00A78667 /* ResponseModels.swift in Sources */,
 				E33E8F792AACABED00A78667 /* OpenWeatherApiClient.swift in Sources */,
 				E33E8F682AAC6E2900A78667 /* WeatherViewController.swift in Sources */,
 				E33E8F712AACA73F00A78667 /* WeatherManager.swift in Sources */,

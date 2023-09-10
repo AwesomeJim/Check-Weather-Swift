@@ -8,15 +8,16 @@
 import Foundation
 
 
-
+protocol WeatherMangerDelegate {
+    func didUpdateWeather(weatherdata :WeatherItemModel)
+}
 
 class OpenWeatherApiClient {
     
-    
-    
+ 
     enum Endpoints {
         static let base = "https://api.openweathermap.org/data/2.5/"
-        static let imageBase = "https://openweathermap.org/img/wn"
+        static let imageBase = "https://openweathermap.org/img/wn/"
         
         
         case weatherCity(String,String)
@@ -45,10 +46,11 @@ class OpenWeatherApiClient {
     }
     
     //Mark:  fetchCityWeather
-    class func fetchDayWeather(cityName:String){
+    class func fetchDayWeather(cityName:String, _ completion:@escaping(_ success:Bool, _ weatherData : WeatherItemModel?, _ message:String?)-> Void) {
         //re-trive the API key form our info list
         guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
             print("Un-Able to acces API Key")
+            completion(false, nil,"Un-Able to acces API Key")
             return
         }
         print(apiKey)
@@ -65,22 +67,19 @@ class OpenWeatherApiClient {
         //3. Give the session a task
         //session.dataTask(with: url, completionHandler: handle(data: respose:  error:))
         let task = session.dataTask(with: url) { data, response, error in
-            
-            let weatherCondition = WeatherUtils.getStringForWeatherCondition(weatherId: 802)
-            let wind = WeatherUtils.getFormattedWind(windSpeed: 2.17, degrees: 130)
-            print("\(weatherCondition) and wind speed is \(wind)")
-            
+        
             let (rawResp, msg) = digestResponse(data, response, error)
             
             guard let responseString = rawResp else {
                 // check for fundamental networking error
                 AppUtils.Log(from:self,with:"REQ. error = \(String(describing: msg))")
-                
+                completion(false, nil,msg)
                 return
             }
             print("responseString : \(responseString)")
             let weatherDataModel = OpenWeatherJsonUtils.getWeatherContentValuesFromJson(weatherData: responseString)
             AppUtils.Log(from:self,with:"Model Data. locationName = \(String(describing: weatherDataModel?.locationWeather.weatherTemp))")
+            completion(true, weatherDataModel,"Data Loading Successfull")
         }
         
         //4. Start the Task
@@ -88,10 +87,11 @@ class OpenWeatherApiClient {
     }
     
     //Mark:  fetchCityWeather
-    class func fetchWeatherForecast(cityName:String){
+    class func fetchWeatherForecast(cityName:String, _ completion:@escaping(_ success:Bool, _ foreCastList : [WeatherItemModel]?, _ message:String?)-> Void) {
         //re-trive the API key form our info list
         guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
             print("Un-Able to acces API Key")
+            completion(false,nil,"Invalid Service Config.")
             return
         }
         print(apiKey)
@@ -100,7 +100,7 @@ class OpenWeatherApiClient {
         
         //1. create url
         let url = OpenWeatherApiClient.Endpoints.forecastCity(cityName,apiKeyParam).url
-        print(url)
+       // print(url)
         
         //2. Create a URL Session
         let session = URLSession(configuration: .default)
@@ -113,12 +113,13 @@ class OpenWeatherApiClient {
             guard let responseString = rawResp else {
                 // check for fundamental networking error
                 AppUtils.Log(from:self,with:"REQ. error = \(String(describing: msg))")
-                
+                completion(false,nil,msg)
                 return
             }
             print("responseString : \(responseString)")
-            let weatherDataModel = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
-            AppUtils.Log(from:self,with:"Model Data. ForecastItems = \(weatherDataModel?.count)")
+            let weatherForeCastList = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
+            AppUtils.Log(from:self,with:"Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
+            completion(true,weatherForeCastList,"Data Loading Successfull")
         }
         
         //4. Start the Task
@@ -147,6 +148,14 @@ class OpenWeatherApiClient {
             AppUtils.Log(from:self,with:"Raw Response String => \(String(describing: String(data: data, encoding: .utf8)))")
             return (String(data:data , encoding: .utf8),nil)
         
-        
+    }
+    
+    class func downloadWeatherIcon(path: String, completion: @escaping (Data?, Error?) -> Void) {
+        let task = URLSession.shared.dataTask(with: OpenWeatherApiClient.Endpoints.weatherIcon(path).url) { data, response, error in
+            DispatchQueue.main.async {
+                completion(data, error)
+            }
+        }
+        task.resume()
     }
 }

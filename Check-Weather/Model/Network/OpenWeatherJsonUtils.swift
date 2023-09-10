@@ -157,7 +157,6 @@ class OpenWeatherJsonUtils {
             
             let weatherStatus = WeatherStatus(
                 weatherConditionId: weatherConditionId,
-                weatherCondition: weatherCondition,
                 weatherConditionIcon:weatherConditionicon,
                 weatherConditionDescription: weatherConditionDescription,
                 weatherTemp: weatherTemp,
@@ -339,7 +338,6 @@ class OpenWeatherJsonUtils {
                 
                 let weatherStatus = WeatherStatus(
                     weatherConditionId: weatherConditionId,
-                    weatherCondition: weatherCondition,
                     weatherConditionIcon:weatherConditionicon,
                     weatherConditionDescription: weatherConditionDescription,
                     weatherTemp: weatherTemp,

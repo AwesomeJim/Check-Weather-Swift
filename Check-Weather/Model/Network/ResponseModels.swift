@@ -26,7 +26,7 @@ struct Coordinates: Codable{
 
 struct WeatherStatus: Codable{
     let weatherConditionId: Int
-    let weatherCondition: String
+    
     let weatherConditionIcon: String
     let weatherConditionDescription: String
     let weatherTemp: Double
@@ -35,6 +35,21 @@ struct WeatherStatus: Codable{
     let weatherPressure: Double
     let weatherHumidity: Int
     let weatherWind: Wind
+    
+    var weatherCondition: String {
+        return WeatherUtils.getStringForWeatherCondition(weatherId: weatherConditionId)
+    }
+    // Computed values
+    var weatherConditionSfIcon:String {
+        return WeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId: weatherConditionId)
+    }
+    
+    
+    var weatherTempString: String {
+        let temp =  String(format: "%.1f", weatherTemp)
+        return temp //WeatherUtils.formatTemperature(temperature: weatherTemp)
+    }
+    
 }
 
 
@@ -42,4 +57,9 @@ struct WeatherStatus: Codable{
 struct Wind :Codable {
     let speed: Double
     let deg: Double
+    
+    // Computed values
+    var windSpeedString:String {
+        return WeatherUtils.getFormattedWind(windSpeed: speed, degrees: deg)
+    }
 }

@@ -79,7 +79,7 @@ class WeatherUtils {
      *
      * @return Wind String in the following form: "2 km/h SW"
      */
-    class func getFormattedWind(windSpeed: Float, degrees: Float) -> String {
+    class func getFormattedWind(windSpeed: Double, degrees: Double) -> String {
         let windFormat = "%1.0f km/h %@"
         
         var direction = "Unknown"
@@ -235,4 +235,40 @@ class WeatherUtils {
         }
         return NSLocalizedString(condition, comment: condition)
     }
+    
+    /**
+     * Helper method to provide the art resource ID according to the weather condition ID returned
+     * by the OpenWeatherMap call. This method is very similar to
+     *
+     * [.getLargeArtResourceIdForWeatherCondition].
+     *
+     * The difference between these two methods is that this method provides larger assets, used
+     * in the "today view" of the list, as well as in the DetailActivity.
+     *
+     * @param weatherId from OpenWeatherMap API response
+     * See http://openweathermap.org/weather-conditions for a list of all IDs
+     *
+     * @return resource ID for the corresponding icon. -1 if no relation is found.
+     */
+    class func getLargeArtResourceIdForWeatherCondition(weatherId: Int) -> String {
+        switch weatherId {
+            case 200...232:
+                return "cloud.bolt"
+            case 300...321:
+                return "cloud.drizzle"
+            case 500...531:
+                return "cloud.rain"
+            case 600...622:
+                return "cloud.snow"
+            case 701...781:
+                return "cloud.fog"
+            case 800:
+                return "sun.max"
+            case 801...804:
+                return "cloud.bolt"
+            default:
+                return "cloud"
+        }
+    }
+        
 }
