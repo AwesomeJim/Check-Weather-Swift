@@ -26,5 +26,42 @@ public class AppUtils {
         return dayOfMonth
     }
     
+    
+    public static func getDateString(from date:Date, dateFormatter:DateFormatter) -> String{
+        //
+        let pars = Calendar.current.dateComponents([.day, .year, .month], from: date)
+        
+        //
+        if pars.year == Calendar.current.dateComponents([.day, .year, .month], from: Date()).year{
+            //
+            if pars.month == Calendar.current.dateComponents([.day, .year, .month], from: Date()).month{
+                dateFormatter.dateFormat = "HH:mm a"
+                //
+                if pars.day == Calendar.current.dateComponents([.day, .year, .month], from: Date()).day{
+                    //
+                    return "Today, \(dateFormatter.string(from: date))"
+                }else if pars.day == Calendar.current.dateComponents([.day, .year, .month], from: Calendar.current.date(byAdding: .day, value: -1, to: Date())!).day{
+                    //
+                    return "Yesterday, \(dateFormatter.string(from: date))"
+                }else {
+                    dateFormatter.dateFormat = "MMM-dd-yyyy"
+                    return "\(dateFormatter.string(from: date))"
+                }
+            }
+        }
+        //
+        return dateFormatter.string(from: date)
+    }
+    
+    public static func formatDate(_ utcTimeMili:Double) ->String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let utcTime = Date(timeIntervalSince1970: utcTimeMili) // 2023-09-10 00:00:00 UTC
+        
+        return getDateString(from: utcTime, dateFormatter: dateFormatter)
+    }
+    
+    
+    
 }
 

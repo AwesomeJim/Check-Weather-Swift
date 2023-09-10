@@ -120,7 +120,7 @@ class OpenWeatherJsonUtils {
             
             //
             guard let weatherForecastItem = weatherForecast.first,
-                  let weatherCondition = weatherForecastItem[ConstantsEnum.OWM_MAIN] as? String,
+                 // let weatherCondition = weatherForecastItem[ConstantsEnum.OWM_MAIN] as? String,
                   let weatherConditionDescription = weatherForecastItem["description"] as? String,
                   let weatherConditionicon = weatherForecastItem["icon"] as? String,
                   let weatherConditionId = weatherForecastItem[ConstantsEnum.OWM_WEATHER_ID] as? Int
@@ -300,7 +300,7 @@ class OpenWeatherJsonUtils {
                     let timeInMilliSeconds = dayForecast["dt"] as? Double,
                     let weatherForecast = dayForecast[ConstantsEnum.OWM_WEATHER] as? [[String:Any]],
                     let weatherForecastItem = weatherForecast.first,
-                    let weatherCondition = weatherForecastItem[ConstantsEnum.OWM_MAIN] as? String,
+                   // let weatherCondition = weatherForecastItem[ConstantsEnum.OWM_MAIN] as? String,
                     let weatherConditionDescription = weatherForecastItem["description"] as? String,
                     let weatherConditionicon = weatherForecastItem["icon"] as? String,
                     let weatherConditionId = weatherForecastItem[ConstantsEnum.OWM_WEATHER_ID] as? Int,
