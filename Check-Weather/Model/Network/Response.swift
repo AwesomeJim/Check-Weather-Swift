@@ -27,6 +27,7 @@ struct Coordinates: Codable{
 struct WeatherStatus: Codable{
     let weatherConditionId: Int
     let weatherCondition: String
+    let weatherConditionIcon: String
     let weatherConditionDescription: String
     let weatherTemp: Double
     let weatherTempMin: Double

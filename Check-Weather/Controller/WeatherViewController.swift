@@ -43,7 +43,7 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         print(cityName)
         searchTextField.text = ""
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
-        OpenWeatherApiClient.fetchWeather(cityName: trimmed)
+        OpenWeatherApiClient.fetchWeatherForecast(cityName: trimmed)
     }
     
     
