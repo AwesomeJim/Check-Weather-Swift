@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class WeatherViewController: UIViewController, UITextFieldDelegate {
+class WeatherViewController: UIViewController {
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -26,12 +27,24 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
     var weatherForecastList:[WeatherItemModel] = []
     
+    let locationManager = CLLocationManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         searchTextField.delegate = self // report back to viewController via delegate callbacks
         tableView.delegate = self
         tableView.dataSource = self
+        
+        locationManager.delegate = self
+        
+        // Request for Location Permiti
+        locationManager.requestWhenInUseAuthorization()
+        
+        //request for a 1 time location
+        locationManager.requestLocation()
+        
+        
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -39,6 +52,93 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
         
     }
     
+    @IBAction func LocationPressed(_ sender: UIButton) {
+        locationManager.requestLocation()
+    }
+    
+    //
+    func makeApiCall(_ cityName:String){
+        let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
+        OpenWeatherApiClient.fetchDayWeather(cityName: trimmed) { [self] status, weatherData, message in
+            if status {
+                DispatchQueue.main.async { [self] in
+                   if let currentWeatherData = weatherData {
+                       updateLocationDetails(weatherData: currentWeatherData)
+                    }
+                }
+            }else {
+                AppUtils.Log(from: self, with: "\(String(describing: message))")
+            }
+        }
+    }
+    
+    // MARK: - updateLOcationDetails
+    func updateLocationDetails(weatherData:WeatherItemModel){
+        temperatureLabel.text = weatherData.locationWeather.weatherTempString
+        AppUtils.Log(from: self, with: "weatherConditionSfIcon \(String(describing: weatherData.locationWeather.weatherConditionSfIcon))")
+        let iconName = weatherData.locationWeather.weatherConditionSfIcon
+        self.conditionImageView.image = UIImage(systemName:iconName)
+        cityLabel.text = weatherData.locationName
+        currentTempLabel.text = weatherData.locationWeather.weatherTempString
+        let miniTemp = weatherData.locationWeather.weatherTempMin
+        let highTemp = weatherData.locationWeather.weatherTempMax
+        miniTempLabel.text = WeatherUtils.formatTemperature(temperature: miniTemp)
+        highTempLabel.text = WeatherUtils.formatTemperature(temperature: highTemp)
+        let date = weatherData.locationDate
+        dateLabel.text = AppUtils.formatDate(date)
+    }
+    
+    //
+    func fetchWeatherForecast(_ cityName:String){
+        let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
+        OpenWeatherApiClient.fetchWeatherForecast(cityName: trimmed) { [self] status, weatherDataList, message in
+            handleWeatherForecastReponse(status: status, weatherDataList: weatherDataList, message: message)
+        }
+    }
+    
+    func handleWeatherForecastReponse(status:Bool, weatherDataList:[WeatherItemModel]?, message:String?){
+        if status {
+            DispatchQueue.main.async { [self] in
+                if let list = weatherDataList {
+                    updateLocationDetails(weatherData: list.first!)
+                    weatherForecastList.removeAll()
+                    weatherForecastList.append(contentsOf: list)
+                    tableView.reloadData()
+                }
+            }
+        }else {
+            AppUtils.Log(from: self, with: "\(String(describing: message))")
+        }
+    }
+}
+
+// MARK: - Location Manger Extention
+
+extension WeatherViewController : CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            locationManager.stopUpdatingLocation()
+            let lat = location.coordinate.latitude
+            let long = location.coordinate.longitude
+            print(lat)
+            print(long)
+            OpenWeatherApiClient.fetchWeatherForecast(latitude: lat, longitude: long) { [self] success, foreCastList, message in
+                    handleWeatherForecastReponse(status: success, weatherDataList: foreCastList, message: message)
+                }
+            }
+
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+    }
+}
+
+// -------------------------------------------------------------------------
+// MARK: UITextField extention
+
+extension WeatherViewController :UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.endEditing(true)
         return true
@@ -65,55 +165,10 @@ class WeatherViewController: UIViewController, UITextFieldDelegate {
             return false
         }
     }
-    
-    
-    func makeApiCall(_ cityName:String){
-        let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
-        OpenWeatherApiClient.fetchDayWeather(cityName: trimmed) { [self] status, weatherData, message in
-            if status {
-                DispatchQueue.main.async { [self] in
-                    temperatureLabel.text = weatherData?.locationWeather.weatherTempString
-                    AppUtils.Log(from: self, with: "weatherConditionSfIcon \(String(describing: weatherData?.locationWeather.weatherConditionSfIcon))")
-                    if let iconName = weatherData?.locationWeather.weatherConditionSfIcon {
-                        self.conditionImageView.image = UIImage(systemName:iconName)
-                    }
-                    cityLabel.text = weatherData?.locationName
-                    currentTempLabel.text = weatherData?.locationWeather.weatherTempString
-                    let miniTemp = weatherData?.locationWeather.weatherTempMin ?? 0.0
-                    let highTemp = weatherData?.locationWeather.weatherTempMax ?? 0.0
-                    miniTempLabel.text = WeatherUtils.formatTemperature(temperature: miniTemp)
-                    highTempLabel.text = WeatherUtils.formatTemperature(temperature: highTemp)
-                    let date = weatherData?.locationDate ?? 1694366698
-                    dateLabel.text = AppUtils.formatDate(date)
-                }
-            }else {
-                AppUtils.Log(from: self, with: "\(String(describing: message))")
-            }
-        }
-    }
-    
-    
-    func fetchWeatherForecast(_ cityName:String){
-        let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
-        OpenWeatherApiClient.fetchWeatherForecast(cityName: trimmed) { [self] status, weatherDataList, message in
-            if status {
-                DispatchQueue.main.async { [self] in
-                    if let list = weatherDataList {
-                        weatherForecastList.removeAll()
-                        weatherForecastList.append(contentsOf: list)
-                        tableView.reloadData()
-                    }
-                }
-            }else {
-                AppUtils.Log(from: self, with: "\(String(describing: message))")
-            }
-        }
-    }
 }
 
-
 // -------------------------------------------------------------------------
-// MARK: Table View Data Source extention
+// MARK: - Table View Data Source extention
 
 extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
     
