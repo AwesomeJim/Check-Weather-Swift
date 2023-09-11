@@ -56,6 +56,19 @@ class WeatherViewController: UIViewController {
         locationManager.requestLocation()
     }
     
+    //-----------------------------------------------------------------
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "showDetails" {
+            let detailVC = segue.destination as! DetailsViewController
+            detailVC.dataModel = sender as? WeatherItemModel
+        }
+    }
+    
     //
     func makeApiCall(_ cityName:String){
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -192,8 +205,8 @@ extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let shortRecipe = self.weatherForecastList[(indexPath as NSIndexPath).row]
-        // performSegue(withIdentifier: kRecipeSegue, sender: shortRecipe)
+        let weatherData = self.weatherForecastList[(indexPath as NSIndexPath).row]
+        performSegue(withIdentifier: "showDetails", sender: weatherData)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

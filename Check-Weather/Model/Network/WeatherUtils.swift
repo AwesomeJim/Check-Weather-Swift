@@ -109,6 +109,17 @@ class WeatherUtils {
     }
     
     
+    class func getFormattedHumidity(humidity: Int) -> String {
+        let humidityFormat = "%1.0f %%"
+        return String(format:humidityFormat, Double(humidity))
+    }
+    
+    
+    class func getFormattedPressure(pressure: Double) -> String {
+        let pressureFormat = "%1.0f hPa"
+        return String(format:pressureFormat, pressure)
+    }
+    
     /**
      * Helper method to provide the string according to the weather
      * condition id returned by the OpenWeatherMap call.
@@ -270,5 +281,5 @@ class WeatherUtils {
                 return "cloud"
         }
     }
-        
+    
 }

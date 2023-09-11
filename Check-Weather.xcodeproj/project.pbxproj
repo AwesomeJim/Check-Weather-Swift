@@ -27,6 +27,7 @@
 		E33E8F882AAD9CAE00A78667 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E33E8F8A2AAD9CAE00A78667 /* Localizable.strings */; };
 		E33E8F8E2AADC51600A78667 /* AppUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F8D2AADC51600A78667 /* AppUtils.swift */; };
 		E33E8F912AAE2B4D00A78667 /* WeatherForecastListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F902AAE2B4D00A78667 /* WeatherForecastListCell.swift */; };
+		E33E8F932AAF03F400A78667 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33E8F922AAF03F400A78667 /* DetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		E33E8F8B2AAD9D1600A78667 /* sw-KE */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sw-KE"; path = "sw-KE.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E33E8F8D2AADC51600A78667 /* AppUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUtils.swift; sourceTree = "<group>"; };
 		E33E8F902AAE2B4D00A78667 /* WeatherForecastListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherForecastListCell.swift; sourceTree = "<group>"; };
+		E33E8F922AAF03F400A78667 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				E33E8F672AAC6E2900A78667 /* WeatherViewController.swift */,
+				E33E8F922AAF03F400A78667 /* DetailsViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -254,6 +257,7 @@
 				E33E8F682AAC6E2900A78667 /* WeatherViewController.swift in Sources */,
 				E33E8F712AACA73F00A78667 /* WeatherManager.swift in Sources */,
 				E33E8F812AAD952C00A78667 /* OpenWeatherJsonUtils.swift in Sources */,
+				E33E8F932AAF03F400A78667 /* DetailsViewController.swift in Sources */,
 				E33E8F832AAD981100A78667 /* WeatherUtils.swift in Sources */,
 				CEE9DAC825C9CD0A005569B2 /* SceneDelegate.swift in Sources */,
 			);
