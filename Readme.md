@@ -20,7 +20,7 @@ This app enable users to:
 
 |                            Home       (Dark Theme)                            |                           Home  (Light Theme)                            |
 |:-----------------------------------------------------------------------------:|:------------------------------------------------------------------------:|
-| <img src="Screenshots/Screenshot_home_dark.png" width="300px" height="600px"> | <img src="screenshots/Screenshot_home.png" width="300px" height="600px"> |
+| <img src="Screenshots/Screenshot_home_dark.png" width="300px" height="600px"> | <img src="Screenshots/Screenshot_home.png" width="300px" height="600px"> |
 
 |                            More Details (Dark Theme)                            |                               (Light Theme)                                |
 |:-------------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
