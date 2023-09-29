@@ -14,6 +14,7 @@ class DetailsViewController: UIViewController {
     
     @IBOutlet weak var weatherDateLabel: UILabel!
     
+    @IBOutlet weak var locationNameLabel: UILabel!
     @IBOutlet weak var weatherDescriptionLabel: UILabel!
     @IBOutlet weak var weatherIcon: UIImageView!
     @IBOutlet weak var lowTemperatureLabel: UILabel!
@@ -45,6 +46,8 @@ class DetailsViewController: UIViewController {
     // MARK: - Update UI with the set details
     func updateUI(){
         if let weatherData = dataModel {
+            
+            locationNameLabel.text = weatherData.locationName
             //1
             weatherDateLabel.text = AppUtils.formatDate(weatherData.locationDate)
             

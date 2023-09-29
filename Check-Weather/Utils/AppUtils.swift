@@ -26,6 +26,14 @@ public class AppUtils {
         return dayOfMonth
     }
     
+    public static func getDayOfMonth() -> Int {
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone(abbreviation: "UTC")!
+        let dayOfMonth = calendar.component(.day, from: Date())
+        return dayOfMonth
+    }
+    
+    
     
     public static func getDateString(from date:Date, dateFormatter:DateFormatter) -> String{
         //
@@ -35,16 +43,16 @@ public class AppUtils {
         if pars.year == Calendar.current.dateComponents([.day, .year, .month], from: Date()).year{
             //
             if pars.month == Calendar.current.dateComponents([.day, .year, .month], from: Date()).month{
-                dateFormatter.dateFormat = "HH:mm a"
+                dateFormatter.dateFormat = "HH:mm aa"
                 //
                 if pars.day == Calendar.current.dateComponents([.day, .year, .month], from: Date()).day{
                     //
                     return "Today, \(dateFormatter.string(from: date))"
-                }else if pars.day == Calendar.current.dateComponents([.day, .year, .month], from: Calendar.current.date(byAdding: .day, value: -1, to: Date())!).day{
+                }else if pars.day == Calendar.current.dateComponents([.day, .year, .month], from: Calendar.current.date(byAdding: .day, value: 1, to: Date())!).day{
                     //
-                    return "Yesterday, \(dateFormatter.string(from: date))"
+                    return "Tomorrow, \(dateFormatter.string(from: date))"
                 }else {
-                    dateFormatter.dateFormat = "MMM-dd-yyyy"
+                    dateFormatter.dateFormat = "EEE, d MMM yyyy"
                     return "\(dateFormatter.string(from: date))"
                 }
             }
@@ -55,7 +63,7 @@ public class AppUtils {
     
     public static func formatDate(_ utcTimeMili:Double) ->String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "EEE, d MMM yyyy"
         let utcTime = Date(timeIntervalSince1970: utcTimeMili) // 2023-09-10 00:00:00 UTC
         
         return getDateString(from: utcTime, dateFormatter: dateFormatter)

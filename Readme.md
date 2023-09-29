@@ -1,21 +1,64 @@
  
 #  Check-Weather-Swift
-This repository is an iOS simple App that implements [Open Weather API](https://openweathermap.org/api) 
+
+This repository is a weather application to display the current weather ☔  at the user’s location and a
+5-day forecast using the  [Open Weather API](https://openweathermap.org/api) built with swift and UIKit
 
 
 Objective of the Project 
 ---------------
 This challenge is aimed at testing my ability to implement API as The best way to learn coding is by coding 
 
-Application Functions:
+✨Application Features:
 --------------
-- Check City Weather
-- 10 Days Weather History 
+This app enable users to:
+- See the weather details as well as a 5 days forecast of their current location
+- Search a location and see the weather details 
 
-Screenshots
------------
-ScreenShot-1.
 
+# [Screenshots 📱](Screenshots/)
+
+|                            Home       (Dark Theme)                            |                           Home  (Light Theme)                            |
+|:-----------------------------------------------------------------------------:|:------------------------------------------------------------------------:|
+| <img src="Screenshots/Screenshot_home_dark.png" width="300px" height="600px"> | <img src="screenshots/Screenshot_home.png" width="300px" height="600px"> |
+
+|                            More Details (Dark Theme)                            |                               (Light Theme)                                |
+|:-------------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
+| <img src="Screenshots/Screenshot_detail_dark.png" width="300px" height="600px"> | <img src="Screenshots/Screenshot_detail.png" width="300px" height="600px"> |
+
+
+## Tech-stack used 🛠
+| **Tech Tools**                                           | **Usage/Purpose** |
+|----------------------------------------------------------|-------------------|
+| [Swift](https://www.swift.org/)                          | Language          |
+| [UIKit](https://developer.apple.com/documentation/uikit) | UI                |
+
+---
+## Development Setup ⚙️ and Pre-requisite 📝
+**The Project uses OpenWeather API :**
+1. [OpenWeather API 🔑](https://openweathermap.org/current) for Weather Data and.
+
+
+#### _⚙️ Setup Weather Data API_
+
+![openweathermap.png](Screenshots/openweathermap.png) <br/>
+This project fetches weather data from the [OpenWeather API](https://openweathermap.org/current).  
+To begin the setup, you'll need to create an account and get a free API key.
+1. Create an account at [openweathermap.org](https://home.openweathermap.org/api_keys)
+2. Go to settings from the profile icon
+3. Click on API
+4. Click on Create
+
+create a Config file  `Config.xcconfig` and place your API config there 
+
+```swift
+#Insert at ~/ Config.xcconfig
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+//
+API_KEY = <Your API Key>
+````
 
 
 License

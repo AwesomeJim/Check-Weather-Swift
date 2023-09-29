@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  Clima
 //
-//  Created by Angela Yu on 01/09/2019.
+//  Created by Awesome Jimon 01/09/2019.
 //  Copyright © 2019 App Brewery. All rights reserved.
 //
 
@@ -75,8 +75,8 @@ class WeatherViewController: UIViewController {
         OpenWeatherApiClient.fetchDayWeather(cityName: trimmed) { [self] status, weatherData, message in
             if status {
                 DispatchQueue.main.async { [self] in
-                   if let currentWeatherData = weatherData {
-                       updateLocationDetails(weatherData: currentWeatherData)
+                    if let currentWeatherData = weatherData {
+                        updateLocationDetails(weatherData: currentWeatherData)
                     }
                 }
             }else {
@@ -92,9 +92,12 @@ class WeatherViewController: UIViewController {
         let iconName = weatherData.locationWeather.weatherConditionSfIcon
         self.conditionImageView.image = UIImage(systemName:iconName)
         cityLabel.text = weatherData.locationName
-        currentTempLabel.text = weatherData.locationWeather.weatherTempString
+        
+        currentTempLabel.text = WeatherUtils.formatTemperature(temperature:weatherData.locationWeather.weatherTemp)
+        
         let miniTemp = weatherData.locationWeather.weatherTempMin
         let highTemp = weatherData.locationWeather.weatherTempMax
+        
         miniTempLabel.text = WeatherUtils.formatTemperature(temperature: miniTemp)
         highTempLabel.text = WeatherUtils.formatTemperature(temperature: highTemp)
         let date = weatherData.locationDate
@@ -137,10 +140,10 @@ extension WeatherViewController : CLLocationManagerDelegate {
             print(lat)
             print(long)
             OpenWeatherApiClient.fetchWeatherForecast(latitude: lat, longitude: long) { [self] success, foreCastList, message in
-                    handleWeatherForecastReponse(status: success, weatherDataList: foreCastList, message: message)
-                }
+                handleWeatherForecastReponse(status: success, weatherDataList: foreCastList, message: message)
             }
-
+        }
+        
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -199,7 +202,12 @@ extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
         cell.weatherDescriptionLabel.text = weatherData.locationWeather.weatherCondition
         let iconName = weatherData.locationWeather.weatherConditionSfIcon
         cell.weatherConditionIcon.image = UIImage(systemName:iconName)
-        cell.weatherTemp.text = weatherData.locationWeather.weatherTempString
+        
+        let miniTemp = WeatherUtils.formatTemperature(temperature: weatherData.locationWeather.weatherTempMin)
+        let highTemp = WeatherUtils.formatTemperature(temperature: weatherData.locationWeather.weatherTempMax)
+        
+        cell.weatherTempMiniLabel.text = miniTemp
+        cell.weatherTemp.text = highTemp
         
         return cell
     }

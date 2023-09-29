@@ -357,7 +357,13 @@ class OpenWeatherJsonUtils {
                     locationWeatherDay: locationWeatherDay
                 )
                 let isDataOntheList = weatherList.contains(where: { $0.locationWeatherDay == locationWeatherDay })
-                if !isDataOntheList {
+                
+                //group the weather data by data
+                let groupeddata = Dictionary(grouping: weatherList,by: { $0.locationWeatherDay })
+                
+                let today = AppUtils.getDayOfMonth()
+                
+                if !isDataOntheList && locationWeatherDay != today {
                     weatherList.append(weatherItemModel)
                 }
             }

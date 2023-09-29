@@ -17,4 +17,5 @@ class WeatherForecastListCell : UITableViewCell{
     
     @IBOutlet weak var weatherTemp: UILabel!
     
+    @IBOutlet weak var weatherTempMiniLabel: UILabel!
 }
