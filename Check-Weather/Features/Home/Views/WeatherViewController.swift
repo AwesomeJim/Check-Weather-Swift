@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 internal import Combine
+import SwiftUI
 
 class WeatherViewController: UIViewController {
     
@@ -21,6 +22,8 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var highTempLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var searchTextField: UITextField!
+    
+    @IBOutlet weak var currentWeatherContainerView: UIView!
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -52,8 +55,43 @@ class WeatherViewController: UIViewController {
         let networkService = NetworkService()
         viewModel = WeatherViewModel(networkService: networkService)
         setupBindings()
+        setupSwiftUIHosting()
         
     }
+    
+    
+    private func setupSwiftUIHosting() {
+        
+        // 1. Create your new SwiftUI view, passing in the
+        //    ViewModel this ViewController already owns.
+        let swiftUIView = CurrentWeatherView(viewModel: viewModel)
+        
+        // 2. Create the "Bridge" controller
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        // 3. Add the hosting controller as a child
+        addChild(hostingController)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 4. Add the hosting controller's view to your container
+        currentWeatherContainerView.addSubview(hostingController.view)
+        
+        // 5. Pin it to the edges of the container
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: currentWeatherContainerView.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: currentWeatherContainerView.bottomAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: currentWeatherContainerView.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: currentWeatherContainerView.trailingAnchor)
+        ])
+        
+        // 6. Complete the bridge
+        hostingController.didMove(toParent: self)
+        
+        // 7. Make the hosting controller's background clear
+        //    so we can see the view controller's background
+        hostingController.view.backgroundColor = .clear
+    }
+    
     
     private func setupBindings() {
         // This is how you "subscribe" to a @Published property
@@ -72,16 +110,6 @@ class WeatherViewController: UIViewController {
             }
             .store(in: &cancellables) // Saves the subscription
         
-        // BINDING 2: Listen for changes to the currentWeather
-        viewModel.$currentWeather
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] weather in
-                guard let weather = weather else { return }
-                AppUtils.logInfo("Test: Received new weather for \(weather.locationName)!")
-                self?.updateLocationDetails(weatherData: weather)
-                self?.viewModel.fetchIcon()
-            }
-            .store(in: &cancellables)
         
         // BINDING 3: Listen for any errors
         viewModel.$errorMessage
@@ -104,18 +132,10 @@ class WeatherViewController: UIViewController {
                     self?.weatherForecastList.removeAll()
                     self?.weatherForecastList.append(contentsOf: forecast)
                     self?.tableView.reloadData()
-                    self?.viewModel.fetchIconsForForecast()
                 }
             }
             .store(in: &cancellables)
         
-        viewModel.$currentIcon
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] image in
-                // This will fire when the icon is downloaded
-                self?.conditionImageView.image  = image
-            }
-            .store(in: &cancellables)
         
         // This binding listens for the icons to be downloaded.
         viewModel.$forecastIcons
@@ -160,7 +180,7 @@ class WeatherViewController: UIViewController {
     
     // MARK: - updateLOcationDetails
     func updateLocationDetails(weatherData:WeatherItemModel){
-        temperatureLabel.text = weatherData.locationWeather.weatherTempString
+        temperatureLabel.text = weatherData.locationWeather.weatherTempIntString
         AppUtils.Log(from: self, with: "weatherConditionSfIcon \(String(describing: weatherData.locationWeather.weatherConditionSfIcon))")
         //let iconName = weatherData.locationWeather.weatherConditionSfIcon
         // self.conditionImageView.image = UIImage(systemName:iconName)
@@ -256,11 +276,11 @@ extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
         // Set the name and image
         cell.weatherDescriptionLabel.text = forecastItem.locationWeather.weatherCondition
         //let iconName = forecastItem.locationWeather.weatherConditionSfIcon
-       //
+        //
         // 2. Get the icon path (e.g., "10d")
         let iconPath = forecastItem.locationWeather.weatherConditionIcon
-            
-            // 3. Look up the downloaded image in the VM's dictionary
+        
+        // 3. Look up the downloaded image in the VM's dictionary
         let iconImage = viewModel.forecastIcons[iconPath]
         cell.weatherConditionIcon.image = iconImage
         

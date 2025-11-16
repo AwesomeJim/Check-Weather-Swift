@@ -63,6 +63,7 @@ class WeatherViewModel: ObservableObject {
         self.isLoading = true
         self.errorMessage = nil
         self.currentWeather = nil
+        self.currentIcon = nil
         self.forecast = []
         
         // 2. 'Task' is how you start an async operation
@@ -82,6 +83,8 @@ class WeatherViewModel: ObservableObject {
                 self.currentWeather = try await currentTask
                 self.forecast = try await forecastTask ?? []
                 
+                self.fetchIcon()
+                self.fetchIconsForForecast()
                 // 5. All done, stop loading.
                 self.isLoading = false
                 
@@ -99,6 +102,7 @@ class WeatherViewModel: ObservableObject {
         self.isLoading = true
         self.errorMessage = nil
         self.currentWeather = nil
+        self.currentIcon = nil
         self.forecast = []
         
         Task {
@@ -109,6 +113,9 @@ class WeatherViewModel: ObservableObject {
                 
                 self.currentWeather = try await currentTask
                 self.forecast = try await forecastTask ?? []
+                
+                self.fetchIcon()
+                self.fetchIconsForForecast()
                 self.isLoading = false
                 
             } catch {

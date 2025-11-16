@@ -27,6 +27,7 @@ struct Coord: Codable {
 // 3. The 'main' object
 struct Main: Codable {
     let temp: Double
+    let feelsLike: Double // Decoded from "feels_like"
     let tempMin: Double // Mapped from "temp_min"
     let tempMax: Double // Mapped from "temp_max"
     let pressure: Double

@@ -32,6 +32,7 @@
 		E36D0D212ECA1EE7000BE5A2 /* WeatherResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D202ECA1EE5000BE5A2 /* WeatherResponse.swift */; };
 		E36D0D232ECA1F40000BE5A2 /* WeatherMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D222ECA1F3D000BE5A2 /* WeatherMapper.swift */; };
 		E36D0D252ECA27F4000BE5A2 /* ForecastResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D242ECA27F1000BE5A2 /* ForecastResponse.swift */; };
+		E36D0D272ECA3D42000BE5A2 /* CurrentWeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D262ECA3D40000BE5A2 /* CurrentWeatherView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		E36D0D202ECA1EE5000BE5A2 /* WeatherResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherResponse.swift; sourceTree = "<group>"; };
 		E36D0D222ECA1F3D000BE5A2 /* WeatherMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherMapper.swift; sourceTree = "<group>"; };
 		E36D0D242ECA27F1000BE5A2 /* ForecastResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastResponse.swift; sourceTree = "<group>"; };
+		E36D0D262ECA3D40000BE5A2 /* CurrentWeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentWeatherView.swift; sourceTree = "<group>"; };
 		E3D768242EB54AB00058419C /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -249,6 +251,7 @@
 		E36D0D0E2EC9E2A7000BE5A2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E36D0D262ECA3D40000BE5A2 /* CurrentWeatherView.swift */,
 				E33E8F672AAC6E2900A78667 /* WeatherViewController.swift */,
 				E33E8F8F2AAE2AFF00A78667 /* Cell */,
 			);
@@ -371,6 +374,7 @@
 				E36D0D112EC9E42E000BE5A2 /* NetworkServiceProtocol.swift in Sources */,
 				E33E8F932AAF03F400A78667 /* DetailsViewController.swift in Sources */,
 				E36D0D232ECA1F40000BE5A2 /* WeatherMapper.swift in Sources */,
+				E36D0D272ECA3D42000BE5A2 /* CurrentWeatherView.swift in Sources */,
 				E33E8F832AAD981100A78667 /* WeatherUtils.swift in Sources */,
 				CEE9DAC825C9CD0A005569B2 /* SceneDelegate.swift in Sources */,
 			);
@@ -540,7 +544,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Check-Weather/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -559,7 +563,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = "Check-Weather/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

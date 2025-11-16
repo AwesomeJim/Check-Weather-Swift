@@ -30,6 +30,7 @@ struct WeatherStatus: Codable{
     let weatherConditionIcon: String
     let weatherConditionDescription: String
     let weatherTemp: Double
+    let weatherfeelsLike:Double
     let weatherTempMin: Double
     let weatherTempMax: Double
     let weatherPressure: Double
@@ -44,10 +45,21 @@ struct WeatherStatus: Codable{
         return WeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId: weatherConditionId)
     }
     
+    /// Returns the main temp rounded to an Int, as a String. E.g., "19"
+    var weatherTempIntString: String {
+        return String(format: "%.0f", weatherTemp)
+    }
     
-    var weatherTempString: String {
-        let temp =  String(format: "%.1f", weatherTemp)
-        return temp //WeatherUtils.formatTemperature(temperature: weatherTemp)
+    /// Returns the 'feels like' temp rounded to an Int, as a String. E.g., "22"
+    var feelsLikeIntString: String {
+        return String(format: "%.0f", weatherfeelsLike)
+    }
+    
+    /// Returns a combined string for High and Low temps. E.g., "High 24° • Low 16°"
+    var highLowString: String {
+        let high = String(format: "%.0f", weatherTempMax)
+        let low = String(format: "%.0f", weatherTempMin)
+        return "High \(high)° • Low \(low)°"
     }
     
 }
