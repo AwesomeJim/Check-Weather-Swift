@@ -47,16 +47,11 @@ class NetworkService: NetworkServiceProtocol {
         }
     }
     
-    // MARK: - Helper: Forecast Response
-    /// The /forecast endpoint returns an object with a "list" key.
-    /// This struct is used to decode that top-level object.
-    struct ForecastResponse: Codable {
-        let list: [WeatherItemModel]
-    }
-    // MARK: - Core Fetch Function (Generic and Reusable)
     
-    // This is a generic function that handles the decoding for any Codable type
-    private func fetch(url: URL) async throws -> String {
+    // MARK: - Core Fetch Function (Generic and Reusable)
+    /// This is your NEW fetch function. It's now truly generic and
+    /// handles all decoding.
+    private func fetch<T: Decodable>(url: URL) async throws -> T {
         
         // 1. Create URLComponents from your base URL
         guard var components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
@@ -65,12 +60,11 @@ class NetworkService: NetworkServiceProtocol {
         }
         
         // 2. Create the API key query item
-        let apiKeyItem = URLQueryItem(name: "appid", value: AppConfig.openWeatherAPIKey)
-        
-        // 3. Add it to the components
-        // If components.queryItems is nil, create a new array
         var queryItems = components.queryItems ?? []
-        queryItems.append(apiKeyItem)
+        queryItems.append(URLQueryItem(name: NetworkUtilsEnum.APP_ID_PARAM, value: AppConfig.openWeatherAPIKey))
+        queryItems.append(URLQueryItem(name: NetworkUtilsEnum.UNITS_PARAM, value: NetworkUtilsEnum.units))
+        
+        
         components.queryItems = queryItems
         
         // 4. Get the final URL with the new query parameter
@@ -86,69 +80,94 @@ class NetworkService: NetworkServiceProtocol {
         // 1. Perform the network request using async/await
         let (data, response) = try await URLSession.shared.data(for: request)
         
+        print("response :\n \(data)")
         // 2. Check for HTTP errors
         guard let httpResponse = response as? HTTPURLResponse,
               (200...299).contains(httpResponse.statusCode) else {
             // Throw a custom error if the status code is bad (e.g., 401, 404, 500)
             throw NetworkError.invalidResponse
         }
-        
+    
         do {
-            let responseString = String(data: data, encoding: .utf8)
-            return responseString ?? "{}"
+            let decoder = JSONDecoder()
+            // This is the magic trick for "temp_min", "temp_max", etc.
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+            return try decoder.decode(T.self, from: data)
         } catch {
-            AppUtils.logError("Failed to fetch coins: \(error.localizedDescription)")
-            // Throw a custom error if decoding fails
+            // This helps you debug decoding errors
+            AppUtils.logError("Decoding Error: \(error)")
             throw NetworkError.decodingError(error)
         }
-        
-//        // 4. Convert the 'Data' object to a 'String'
-//        //    We use .utf8 encoding, which is standard for JSON.
-//        guard let responseString = String(data: data, encoding: .utf8) else {
-//            // This would fail if the data wasn't valid text
-//            throw NetworkError.decodingError(<#any Error#>)// Or a more specific error
-//        }
-//        
-//        // 5. Return the raw string
-//        return responseString
     }
     
+    /// A generic helper that fetches data, logs the response, maps it, logs the result, and returns it.
+    private func fetchAndMap<ResponseType: Decodable, MappedType>(
+        url: URL,
+        mapper: (ResponseType) -> MappedType, // The mapping function to pass in
+        logContext: String                   // A string for clear logging
+    ) async throws -> MappedType {
+        
+        // 1. Fetch
+        // The type 'ResponseType' is inferred by the 'fetch' function
+        let response: ResponseType = try await fetch(url: url)
+        AppUtils.logInfo("Raw \(logContext) response: \(response)")
+        
+        // 2. Map
+        let mappedData = mapper(response)
+        
+        // 3. Log
+        if let dataList = mappedData as? [Any] {
+            AppUtils.logInfo("Mapped \(logContext) items: \(dataList.count)")
+        } else {
+            AppUtils.logInfo("Mapped \(logContext) data: \(mappedData)")
+        }
+        
+        // 4. Return
+        return mappedData
+    }
+    
+    class func downloadWeatherIcon(path: String, completion: @escaping (Data?, Error?) -> Void) {
+        let task = URLSession.shared.dataTask(with: OpenWeatherApiClient.Endpoints.weatherIcon(path).url) { data, response, error in
+            DispatchQueue.main.async {
+                completion(data, error)
+            }
+        }
+        task.resume()
+    }
     
     // MARK: - Public API Methods (from Protocol)
     
     func getCurrentWeather(city: String) async throws -> WeatherItemModel? {
-        // Use the generic fetch for the 'current' endpoint
-        let responseString  = try await fetch(url: Endpoints.weatherCity(city).url)
-        AppUtils.logInfo("getCurrentWeather responseString \n: \(responseString)")
-        let weatherDataModel = OpenWeatherJsonUtils.getWeatherContentValuesFromJson(weatherData: responseString)
-        AppUtils.logInfo("Model Data. locationName = \(String(describing: weatherDataModel?.locationName))")
-        return weatherDataModel
+        return try await fetchAndMap(
+                url: Endpoints.weatherCity(city).url,
+                mapper: WeatherMapper.mapWeatherResponse,
+                logContext: "CurrentWeather"
+            )
     }
     
     func getWeatherForecast(city: String) async throws -> [WeatherItemModel]? {
-        // Use the generic fetch for the 'forecast' endpoint
-        let responseString = try await fetch(url: Endpoints.forecastCity(city).url)
-        AppUtils.Log(from:self,with:"Model Data. forecastResponse = \(String(describing: responseString))")
-        print("responseString : \(responseString)")
-        let weatherForeCastList = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
-        AppUtils.logInfo("Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
-        return weatherForeCastList
+        return try await fetchAndMap(
+                url: Endpoints.forecastCity(city).url,
+                mapper: WeatherMapper.mapForecastResponse, // Pass the function
+                logContext: "Forecast"
+            )
     }
     
     func getCurrentWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> WeatherItemModel? {
-        let responseString  = try await fetch(url: Endpoints.weatherCoordinates(lat: lat, lon: lon).url)
-        AppUtils.logInfo("responseString :\n \(responseString)")
-        let weatherDataModel = OpenWeatherJsonUtils.getWeatherContentValuesFromJson(weatherData: responseString)
-        AppUtils.logInfo("Model Data. locationName = \(String(describing: weatherDataModel?.locationWeather.weatherTemp))")
-        return weatherDataModel
+        return try await fetchAndMap(
+                url: Endpoints.weatherCoordinates(lat: lat, lon: lon).url,
+                mapper: WeatherMapper.mapWeatherResponse,
+                logContext: "CurrentWeather"
+            )
     }
     
     func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> [WeatherItemModel]?{
-        let responseString = try await fetch(url: Endpoints.forecastCoordinates(lat: lat, lon: lon).url)
-        AppUtils.logInfo("Model Data. forecastResponse = \(responseString))")
-        let weatherForeCastList = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
-        AppUtils.logInfo("Model Data. ForecastItems = \(weatherForeCastList?.count)")
-        return weatherForeCastList
+        return try await fetchAndMap(
+                url: Endpoints.forecastCoordinates(lat: lat, lon: lon).url,
+                mapper: WeatherMapper.mapForecastResponse,
+                logContext: "Forecast"
+            )
     }
+    
     
 }

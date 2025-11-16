@@ -52,7 +52,7 @@ class WeatherViewController: UIViewController {
         let networkService = NetworkService()
         viewModel = WeatherViewModel(networkService: networkService)
         setupBindings()
-    
+        
     }
     
     private func setupBindings() {
@@ -64,7 +64,7 @@ class WeatherViewController: UIViewController {
             .sink { [weak self] isLoading in
                 if isLoading {
                     AppUtils.logInfo("Test: ViewModel is now loading...")
-                   
+                    
                 } else {
                     AppUtils.logInfo("Test: ViewModel finished loading.")
                     
@@ -100,7 +100,10 @@ class WeatherViewController: UIViewController {
             .sink { [weak self] forecast in
                 if !forecast.isEmpty {
                     AppUtils.logInfo("Test: ViewModel forecast Data : \(forecast.count)")
-                    self?.handleWeatherForecastReponse(status: true, weatherDataList: forecast, message: "")
+                    self?.weatherForecastList.removeAll()
+                    self?.weatherForecastList.append(contentsOf: forecast)
+                    self?.tableView.reloadData()
+                    
                 }
             }
             .store(in: &cancellables)
@@ -156,7 +159,7 @@ class WeatherViewController: UIViewController {
     //
     func fetchWeatherForecast(_ cityName:String){
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
-       viewModel.fetchWeather(for: trimmed)
+        viewModel.fetchWeather(for: trimmed)
     }
     
 }
@@ -172,8 +175,8 @@ extension WeatherViewController : CLLocationManagerDelegate {
             let long = location.coordinate.longitude
             print(lat)
             print(long)
-         print("Test: Fetching weather for current location...")
-          viewModel.fetchWeather(lat: location.coordinate.latitude,lon: location.coordinate.longitude)
+            print("Test: Fetching weather for current location...")
+            viewModel.fetchWeather(lat: location.coordinate.latitude,lon: location.coordinate.longitude)
         }
         
     }

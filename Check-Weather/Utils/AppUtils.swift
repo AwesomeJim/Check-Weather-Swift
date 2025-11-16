@@ -43,7 +43,7 @@ public class AppUtils {
         if pars.year == Calendar.current.dateComponents([.day, .year, .month], from: Date()).year{
             //
             if pars.month == Calendar.current.dateComponents([.day, .year, .month], from: Date()).month{
-                dateFormatter.dateFormat = "HH:mm aa"
+                dateFormatter.dateFormat = "HH:mm"
                 //
                 if pars.day == Calendar.current.dateComponents([.day, .year, .month], from: Date()).day{
                     //
