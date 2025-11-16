@@ -84,26 +84,26 @@ class WeatherUtils {
         
         var direction = "Unknown"
         switch degrees {
-            case ...22.5 :
-                direction = "N"
-            case 337.5...:
-                direction = "N"
-            case 22.5...67.5:
-                direction = "NE"
-            case 67.5...112.5:
-                direction = "E"
-            case 112.5...157.5:
-                direction = "SE"
-            case 157.5...202.5:
-                direction = "S"
-            case 202.5...247.5:
-                direction = "SW"
-            case 247.5...292.5:
-                direction = "W"
-            case 292.5...337.5:
-                direction = "NW"
-            default:
-                break
+        case ...22.5 :
+            direction = "N"
+        case 337.5...:
+            direction = "N"
+        case 22.5...67.5:
+            direction = "NE"
+        case 67.5...112.5:
+            direction = "E"
+        case 112.5...157.5:
+            direction = "SE"
+        case 157.5...202.5:
+            direction = "S"
+        case 202.5...247.5:
+            direction = "SW"
+        case 247.5...292.5:
+            direction = "W"
+        case 292.5...337.5:
+            direction = "NW"
+        default:
+            break
         }
         return String(format:windFormat, windSpeed, direction)
     }
@@ -133,116 +133,116 @@ class WeatherUtils {
     class func getStringForWeatherCondition(weatherId: Int) -> String {
         var condition = ""
         switch weatherId {
-            case 200...232 :
-                condition = "condition_2xx"
-            case  300...321 :
-                condition = "condition_3xx"
-            case  500 :
-                condition = "condition_500"
-            case 501 :
-                condition = "condition_501"
-            case  502 :
-                condition = "condition_502"
-            case  503 :
-                condition = "condition_503"
-            case   504 :
-                condition = "condition_504"
-            case   511 :
-                condition = "condition_511"
-            case    520 :
-                condition = "condition_520"
-            case    531 :
-                condition = "condition_531"
-            case   600 :
-                condition = "condition_600"
-            case    601 :
-                condition = "condition_601"
-            case   602 :
-                condition = "condition_602"
-            case    611 :
-                condition = "condition_611"
-            case    612 :
-                condition = "condition_612"
-            case    615 :
-                condition = "condition_615"
-            case    616 :
-                condition = "condition_616"
-            case    620 :
-                condition = "condition_620"
-            case    621 :
-                condition = "condition_621"
-            case   622 :
-                condition = "condition_622"
-            case    701 :
-                condition = "condition_701"
-            case    711 :
-                condition = "condition_711"
-            case    721 :
-                condition = "condition_721"
-            case    731 :
-                condition = "condition_731"
-            case    741 :
-                condition = "condition_741"
-            case    751 :
-                condition = "condition_751"
-            case    761 :
-                condition = "condition_761"
-            case   762 :
-                condition = "condition_762"
-            case    771 :
-                condition = "condition_771"
-            case   781 :
-                condition = "condition_781"
-            case    800 :
-                condition = "condition_800"
-            case    801 :
-                condition = "condition_801"
-            case    802 :
-                condition = "condition_802"
-            case    803 :
-                condition = "condition_803"
-            case    804 :
-                condition = "condition_804"
-            case    900 :
-                condition = "condition_900"
-            case    901 :
-                condition = "condition_901"
-            case    902 :
-                condition = "condition_902"
-            case    903 :
-                condition = "condition_903"
-            case    904 :
-                condition = "condition_904"
-            case   905 :
-                condition = "condition_905"
-            case   906 :
-                condition = "condition_906"
-            case    951 :
-                condition = "condition_951"
-            case    952 :
-                condition = "condition_952"
-            case    953 :
-                condition = "condition_953"
-            case   954 :
-                condition = "condition_954"
-            case   955 :
-                condition = "condition_955"
-            case   956 :
-                condition = "condition_956"
-            case   957 :
-                condition = "condition_957"
-            case   958 :
-                condition = "condition_958"
-            case   959 :
-                condition = "condition_959"
-            case   960 :
-                condition = "condition_960"
-            case   961 :
-                condition = "condition_961"
-            case  962 :
-                condition = "condition_962"
-            default:
-                break
+        case 200...232 :
+            condition = "condition_2xx"
+        case  300...321 :
+            condition = "condition_3xx"
+        case  500 :
+            condition = "condition_500"
+        case 501 :
+            condition = "condition_501"
+        case  502 :
+            condition = "condition_502"
+        case  503 :
+            condition = "condition_503"
+        case   504 :
+            condition = "condition_504"
+        case   511 :
+            condition = "condition_511"
+        case    520 :
+            condition = "condition_520"
+        case    531 :
+            condition = "condition_531"
+        case   600 :
+            condition = "condition_600"
+        case    601 :
+            condition = "condition_601"
+        case   602 :
+            condition = "condition_602"
+        case    611 :
+            condition = "condition_611"
+        case    612 :
+            condition = "condition_612"
+        case    615 :
+            condition = "condition_615"
+        case    616 :
+            condition = "condition_616"
+        case    620 :
+            condition = "condition_620"
+        case    621 :
+            condition = "condition_621"
+        case   622 :
+            condition = "condition_622"
+        case    701 :
+            condition = "condition_701"
+        case    711 :
+            condition = "condition_711"
+        case    721 :
+            condition = "condition_721"
+        case    731 :
+            condition = "condition_731"
+        case    741 :
+            condition = "condition_741"
+        case    751 :
+            condition = "condition_751"
+        case    761 :
+            condition = "condition_761"
+        case   762 :
+            condition = "condition_762"
+        case    771 :
+            condition = "condition_771"
+        case   781 :
+            condition = "condition_781"
+        case    800 :
+            condition = "condition_800"
+        case    801 :
+            condition = "condition_801"
+        case    802 :
+            condition = "condition_802"
+        case    803 :
+            condition = "condition_803"
+        case    804 :
+            condition = "condition_804"
+        case    900 :
+            condition = "condition_900"
+        case    901 :
+            condition = "condition_901"
+        case    902 :
+            condition = "condition_902"
+        case    903 :
+            condition = "condition_903"
+        case    904 :
+            condition = "condition_904"
+        case   905 :
+            condition = "condition_905"
+        case   906 :
+            condition = "condition_906"
+        case    951 :
+            condition = "condition_951"
+        case    952 :
+            condition = "condition_952"
+        case    953 :
+            condition = "condition_953"
+        case   954 :
+            condition = "condition_954"
+        case   955 :
+            condition = "condition_955"
+        case   956 :
+            condition = "condition_956"
+        case   957 :
+            condition = "condition_957"
+        case   958 :
+            condition = "condition_958"
+        case   959 :
+            condition = "condition_959"
+        case   960 :
+            condition = "condition_960"
+        case   961 :
+            condition = "condition_961"
+        case  962 :
+            condition = "condition_962"
+        default:
+            break
         }
         return NSLocalizedString(condition, comment: condition)
     }
@@ -263,22 +263,22 @@ class WeatherUtils {
      */
     class func getLargeArtResourceIdForWeatherCondition(weatherId: Int) -> String {
         switch weatherId {
-            case 200...232:
-                return "cloud.bolt"
-            case 300...321:
-                return "cloud.drizzle"
-            case 500...531:
-                return "cloud.rain"
-            case 600...622:
-                return "cloud.snow"
-            case 701...781:
-                return "cloud.fog"
-            case 800:
-                return "sun.max"
-            case 801...804:
-                return "cloud.bolt"
-            default:
-                return "cloud"
+        case 200...232:
+            return "cloud.bolt"
+        case 300...321:
+            return "cloud.drizzle"
+        case 500...531:
+            return "cloud.rain"
+        case 600...622:
+            return "cloud.snow"
+        case 701...781:
+            return "cloud.fog"
+        case 800:
+            return "sun.max"
+        case 801...804:
+            return "cloud.bolt"
+        default:
+            return "cloud"
         }
     }
     

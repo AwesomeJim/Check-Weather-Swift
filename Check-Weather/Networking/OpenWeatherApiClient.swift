@@ -50,7 +50,7 @@ class OpenWeatherApiClient {
     class func fetchDayWeather(cityName:String, _ completion:@escaping(_ success:Bool, _ weatherData : WeatherItemModel?, _ message:String?)-> Void) {
         //re-trive the API key form our info list
         guard let apiKey = Bundle.main.infoDictionary?["API_KEY"] as? String else {
-            print("Un-Able to acces API Key")
+            AppUtils.logError("Un-Able to acces API Key")
             completion(false, nil,"Un-Able to acces API Key")
             return
         }

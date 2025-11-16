@@ -70,6 +70,12 @@ public class AppUtils {
     }
     
     
+    public static func logError(_ obj: Any?) {
+        debugPrint("❌: \(String(describing: obj))")
+    }
+    public static  func logInfo(_ obj: Any?) {
+        debugPrint("✅: \(String(describing: obj))")
+    }
     
 }
 
