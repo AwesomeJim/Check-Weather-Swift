@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+internal import Combine
 
 class WeatherViewController: UIViewController {
     
@@ -29,6 +30,10 @@ class WeatherViewController: UIViewController {
     
     let locationManager = CLLocationManager()
     
+    // 2. Add properties for the VM and subscriptions
+    private var viewModel: WeatherViewModel!
+    private var cancellables = Set<AnyCancellable>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -44,7 +49,55 @@ class WeatherViewController: UIViewController {
         //request for a 1 time location
         locationManager.requestLocation()
         
+        let networkService = NetworkService()
+        viewModel = WeatherViewModel(networkService: networkService)
+        setupBindings()
+        // 5. Trigger your first test fetch!
+                // This REPLACES your old network call
+       viewModel.fetchWeather(for: "Nairobi")
         
+    }
+    
+    private func setupBindings() {
+        // This is how you "subscribe" to a @Published property
+        // We use [weak self] to prevent a memory leak
+        // BINDING 1: Listen for changes to isLoading
+        viewModel.$isLoading
+            .receive(on: DispatchQueue.main) // Ensure UI work is on the main thread
+            .sink { [weak self] isLoading in
+                if isLoading {
+                    AppUtils.logInfo("Test: ViewModel is now loading...")
+                   
+                } else {
+                    AppUtils.logInfo("Test: ViewModel finished loading.")
+                    
+                }
+            }
+            .store(in: &cancellables) // Saves the subscription
+        
+        // BINDING 2: Listen for changes to the currentWeather
+        viewModel.$currentWeather
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] weather in
+                guard let weather = weather else { return }
+                AppUtils.logInfo("Test: Received new weather for \(weather.locationName)!")
+                
+            }
+            .store(in: &cancellables)
+        
+        // BINDING 3: Listen for any errors
+        viewModel.$errorMessage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] message in
+                guard let message = message else { return }
+                
+                AppUtils.logError("Test: ViewModel reported an error: \(message)")
+                // Show an alert to the user
+                // self?.showAlert(title: "Error", message: message)
+            }
+            .store(in: &cancellables)
+        
+        // You can also bind to viewModel.$forecast in the same way
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -139,9 +192,12 @@ extension WeatherViewController : CLLocationManagerDelegate {
             let long = location.coordinate.longitude
             print(lat)
             print(long)
-            OpenWeatherApiClient.fetchWeatherForecast(latitude: lat, longitude: long) { [self] success, foreCastList, message in
-                handleWeatherForecastReponse(status: success, weatherDataList: foreCastList, message: message)
-            }
+           // OpenWeatherApiClient.fetchWeatherForecast(latitude: lat, longitude: long) { [self] success, foreCastList, message in
+              //  handleWeatherForecastReponse(status: success, weatherDataList: foreCastList, message: message)
+           // }
+            print("Test: Fetching weather for current location...")
+//          viewModel.fetchWeather(lat: location.coordinate.latitude,
+//                                lon: location.coordinate.longitude)
         }
         
     }
