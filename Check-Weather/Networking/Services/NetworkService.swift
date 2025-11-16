@@ -127,7 +127,7 @@ class NetworkService: NetworkServiceProtocol {
     }
     
     class func downloadWeatherIcon(path: String, completion: @escaping (Data?, Error?) -> Void) {
-        let task = URLSession.shared.dataTask(with: OpenWeatherApiClient.Endpoints.weatherIcon(path).url) { data, response, error in
+        let task = URLSession.shared.dataTask(with: Endpoints.weatherIcon(path).url) { data, response, error in
             DispatchQueue.main.async {
                 completion(data, error)
             }
@@ -148,7 +148,7 @@ class NetworkService: NetworkServiceProtocol {
     func getWeatherForecast(city: String) async throws -> [WeatherItemModel]? {
         return try await fetchAndMap(
                 url: Endpoints.forecastCity(city).url,
-                mapper: WeatherMapper.mapForecastResponse, // Pass the function
+                mapper: WeatherMapper.mapForecastResponse,
                 logContext: "Forecast"
             )
     }
@@ -168,6 +168,23 @@ class NetworkService: NetworkServiceProtocol {
                 logContext: "Forecast"
             )
     }
+    
+    func downloadIcon(path: String) async throws -> Data {
+    
+            AppUtils.logInfo("downloadIcon path: \(path)")
+            let imageUrl = Endpoints.weatherIcon(path).url
+            AppUtils.logInfo("imageUrl: \(imageUrl)")
+            // This is the modern replacement for 'dataTask'
+            let (data, response) = try await  URLSession.shared.data(from: imageUrl)
+            
+            // Check for a 200-OK
+            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+                throw NetworkError.invalidResponse
+            }
+            
+            // Return the raw image data
+            return data
+        }
     
     
 }

@@ -21,4 +21,7 @@ protocol NetworkServiceProtocol {
     
     /// Fetches the 5-day weather forecast for specific coordinates.
     func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> [WeatherItemModel]?
+    
+    /// Fetches the raw image data for a given weather icon path.
+    func downloadIcon(path: String) async throws -> Data
 }

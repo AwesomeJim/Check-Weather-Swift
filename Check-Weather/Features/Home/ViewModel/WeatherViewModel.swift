@@ -9,6 +9,7 @@
 import Foundation
 internal import Combine
 import _LocationEssentials
+import UIKit
 
 // By marking the whole class with @MainActor, you guarantee
 // that all property updates (the @Published ones) and
@@ -35,6 +36,12 @@ class WeatherViewModel: ObservableObject {
     
     /// Holds an error message to show to the user.
     @Published var errorMessage: AppError?
+    
+    @Published var currentIcon: UIImage?
+    
+    /// Stores [IconPath: DownloadedImage], e.g., ["10d": UIImage(...)]
+    @Published var forecastIcons: [String: UIImage] = [:]
+    
     
     // MARK: - 2. Dependency (The "How")
     
@@ -107,6 +114,71 @@ class WeatherViewModel: ObservableObject {
             } catch {
                 self.errorMessage = AppError(title: "An Error Occurred", message: error.localizedDescription)
                 self.isLoading = false
+            }
+        }
+    }
+    
+    /// Triggers the download for the current weather's icon.
+    func fetchIcon() {
+        // Make sure we have weather data and an icon path
+        guard let iconPath = currentWeather?.locationWeather.weatherConditionIcon else {
+            AppUtils.logError("weatherConditionIcon is null")
+            return
+        }
+        
+        Task {
+            do {
+                // Call the new service method
+                let iconData = try await networkService.downloadIcon(path: iconPath)
+                
+                // Update the @Published property
+                self.currentIcon = UIImage(data: iconData)
+                
+            } catch {
+                AppUtils.logError("Failed to download icon: \(error)")
+                let iconName = currentWeather?.locationWeather.weatherConditionSfIcon
+                self.currentIcon = UIImage(systemName:iconName ??   "cloud")
+            }
+        }
+    }
+    /// Fetches all unique icons for the current forecast list.
+    func fetchIconsForForecast() {
+        
+        // 1. Get all unique icon paths from the forecast
+        //    (Using Set avoids downloading "10d" 5 times)
+        let allPaths = forecast.map { $0.locationWeather.weatherConditionIcon }
+        let uniquePaths = Set(allPaths)
+        
+        // 2. Clear old icons
+        self.forecastIcons.removeAll()
+        
+        // 3. Start a new Task to run in the background
+        Task {
+            // 4. Use a TaskGroup to run multiple downloads at once
+            //    This is the modern, fast way to do this!
+            await withTaskGroup(of: (path: String, image: UIImage?).self) { group in
+                
+                for path in uniquePaths {
+                    // Add a new download "job" to the group
+                    group.addTask {
+                        do {
+                            let data = try await self.networkService.downloadIcon(path: path)
+                            return (path, UIImage(data: data))
+                        } catch {
+                            AppUtils.logError("Failed to download forecast icon \(path): \(error)")
+                            return (path, nil)
+                        }
+                    }
+                }
+                
+                // 5. As each "job" finishes, collect its result
+                for await (path, image) in group {
+                    if let image = image {
+                        // 6. Update our dictionary. This will trigger
+                        //    our UI to update (see Step 2)
+                        self.forecastIcons[path] = image
+                    }
+                }
             }
         }
     }

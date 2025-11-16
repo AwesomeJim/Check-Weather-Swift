@@ -79,6 +79,7 @@ class WeatherViewController: UIViewController {
                 guard let weather = weather else { return }
                 AppUtils.logInfo("Test: Received new weather for \(weather.locationName)!")
                 self?.updateLocationDetails(weatherData: weather)
+                self?.viewModel.fetchIcon()
             }
             .store(in: &cancellables)
         
@@ -103,7 +104,27 @@ class WeatherViewController: UIViewController {
                     self?.weatherForecastList.removeAll()
                     self?.weatherForecastList.append(contentsOf: forecast)
                     self?.tableView.reloadData()
-                    
+                    self?.viewModel.fetchIconsForForecast()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$currentIcon
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] image in
+                // This will fire when the icon is downloaded
+                self?.conditionImageView.image  = image
+            }
+            .store(in: &cancellables)
+        
+        // This binding listens for the icons to be downloaded.
+        viewModel.$forecastIcons
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] icons in
+                // As icons stream in, the dictionary is updated.
+                // Just reload the table to show them.
+                if !icons.isEmpty {
+                    self?.tableView.reloadData()
                 }
             }
             .store(in: &cancellables)
@@ -141,8 +162,8 @@ class WeatherViewController: UIViewController {
     func updateLocationDetails(weatherData:WeatherItemModel){
         temperatureLabel.text = weatherData.locationWeather.weatherTempString
         AppUtils.Log(from: self, with: "weatherConditionSfIcon \(String(describing: weatherData.locationWeather.weatherConditionSfIcon))")
-        let iconName = weatherData.locationWeather.weatherConditionSfIcon
-        self.conditionImageView.image = UIImage(systemName:iconName)
+        //let iconName = weatherData.locationWeather.weatherConditionSfIcon
+        // self.conditionImageView.image = UIImage(systemName:iconName)
         cityLabel.text = weatherData.locationName
         
         currentTempLabel.text = WeatherUtils.formatTemperature(temperature:weatherData.locationWeather.weatherTemp)
@@ -229,17 +250,22 @@ extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherForecastCell", for: indexPath) as! WeatherForecastListCell
-        let weatherData = self.weatherForecastList[(indexPath as NSIndexPath).row]
-        
-        cell.dateLabel.text = AppUtils.formatDate(weatherData.locationDate)
+        let forecastItem = viewModel.forecast[indexPath.row]
+        cell.dateLabel.text = AppUtils.formatDate(forecastItem.locationDate)
         
         // Set the name and image
-        cell.weatherDescriptionLabel.text = weatherData.locationWeather.weatherCondition
-        let iconName = weatherData.locationWeather.weatherConditionSfIcon
-        cell.weatherConditionIcon.image = UIImage(systemName:iconName)
+        cell.weatherDescriptionLabel.text = forecastItem.locationWeather.weatherCondition
+        //let iconName = forecastItem.locationWeather.weatherConditionSfIcon
+       //
+        // 2. Get the icon path (e.g., "10d")
+        let iconPath = forecastItem.locationWeather.weatherConditionIcon
+            
+            // 3. Look up the downloaded image in the VM's dictionary
+        let iconImage = viewModel.forecastIcons[iconPath]
+        cell.weatherConditionIcon.image = iconImage
         
-        let miniTemp = WeatherUtils.formatTemperature(temperature: weatherData.locationWeather.weatherTempMin)
-        let highTemp = WeatherUtils.formatTemperature(temperature: weatherData.locationWeather.weatherTempMax)
+        let miniTemp = WeatherUtils.formatTemperature(temperature: forecastItem.locationWeather.weatherTempMin)
+        let highTemp = WeatherUtils.formatTemperature(temperature: forecastItem.locationWeather.weatherTempMax)
         
         cell.weatherTempMiniLabel.text = miniTemp
         cell.weatherTemp.text = highTemp
