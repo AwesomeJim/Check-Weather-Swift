@@ -119,9 +119,9 @@ class NetworkService: NetworkServiceProtocol {
     func getCurrentWeather(city: String) async throws -> WeatherItemModel? {
         // Use the generic fetch for the 'current' endpoint
         let responseString  = try await fetch(url: Endpoints.weatherCity(city).url)
-        print("responseString : \(responseString)")
+        AppUtils.logInfo("getCurrentWeather responseString \n: \(responseString)")
         let weatherDataModel = OpenWeatherJsonUtils.getWeatherContentValuesFromJson(weatherData: responseString)
-        AppUtils.Log(from:self,with:"Model Data. locationName = \(String(describing: weatherDataModel?.locationWeather.weatherTemp))")
+        AppUtils.logInfo("Model Data. locationName = \(String(describing: weatherDataModel?.locationName))")
         return weatherDataModel
     }
     
@@ -131,24 +131,23 @@ class NetworkService: NetworkServiceProtocol {
         AppUtils.Log(from:self,with:"Model Data. forecastResponse = \(String(describing: responseString))")
         print("responseString : \(responseString)")
         let weatherForeCastList = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
-        AppUtils.Log(from:self,with:"Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
+        AppUtils.logInfo("Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
         return weatherForeCastList
     }
     
     func getCurrentWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> WeatherItemModel? {
         let responseString  = try await fetch(url: Endpoints.weatherCoordinates(lat: lat, lon: lon).url)
-        print("responseString : \(responseString)")
+        AppUtils.logInfo("responseString :\n \(responseString)")
         let weatherDataModel = OpenWeatherJsonUtils.getWeatherContentValuesFromJson(weatherData: responseString)
-        AppUtils.Log(from:self,with:"Model Data. locationName = \(String(describing: weatherDataModel?.locationWeather.weatherTemp))")
+        AppUtils.logInfo("Model Data. locationName = \(String(describing: weatherDataModel?.locationWeather.weatherTemp))")
         return weatherDataModel
     }
     
     func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> [WeatherItemModel]?{
         let responseString = try await fetch(url: Endpoints.forecastCoordinates(lat: lat, lon: lon).url)
-        AppUtils.Log(from:self,with:"Model Data. forecastResponse = \(String(describing: responseString))")
-        print("responseString : \(responseString)")
+        AppUtils.logInfo("Model Data. forecastResponse = \(responseString))")
         let weatherForeCastList = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
-        AppUtils.Log(from:self,with:"Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
+        AppUtils.logInfo("Model Data. ForecastItems = \(weatherForeCastList?.count)")
         return weatherForeCastList
     }
     

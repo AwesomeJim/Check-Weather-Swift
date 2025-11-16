@@ -162,7 +162,7 @@ class OpenWeatherApiClient {
             }
             print("responseString : \(responseString)")
             let weatherForeCastList = OpenWeatherJsonUtils.getWeatherForecastContentValuesFromJson(weatherData: responseString)
-            AppUtils.Log(from:self,with:"Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
+            AppUtils.logInfo("Model Data. ForecastItems = \(String(describing: weatherForeCastList?.count))")
             completion(true,weatherForeCastList,"Data Loading Successfull")
         }
         

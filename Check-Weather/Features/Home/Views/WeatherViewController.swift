@@ -52,10 +52,7 @@ class WeatherViewController: UIViewController {
         let networkService = NetworkService()
         viewModel = WeatherViewModel(networkService: networkService)
         setupBindings()
-        // 5. Trigger your first test fetch!
-                // This REPLACES your old network call
-       viewModel.fetchWeather(for: "Nairobi")
-        
+    
     }
     
     private func setupBindings() {
@@ -81,7 +78,7 @@ class WeatherViewController: UIViewController {
             .sink { [weak self] weather in
                 guard let weather = weather else { return }
                 AppUtils.logInfo("Test: Received new weather for \(weather.locationName)!")
-                
+                self?.updateLocationDetails(weatherData: weather)
             }
             .store(in: &cancellables)
         
@@ -93,11 +90,20 @@ class WeatherViewController: UIViewController {
                 
                 AppUtils.logError("Test: ViewModel reported an error: \(message)")
                 // Show an alert to the user
-                // self?.showAlert(title: "Error", message: message)
+                self?.presentErrorAlert(error: message)
+                self?.viewModel.errorMessage = nil // Clear the error after showing
             }
             .store(in: &cancellables)
         
-        // You can also bind to viewModel.$forecast in the same way
+        viewModel.$forecast
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] forecast in
+                if !forecast.isEmpty {
+                    AppUtils.logInfo("Test: ViewModel forecast Data : \(forecast.count)")
+                    self?.handleWeatherForecastReponse(status: true, weatherDataList: forecast, message: "")
+                }
+            }
+            .store(in: &cancellables)
     }
     
     @IBAction func searchPressed(_ sender: UIButton) {
@@ -125,17 +131,7 @@ class WeatherViewController: UIViewController {
     //
     func makeApiCall(_ cityName:String){
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
-        OpenWeatherApiClient.fetchDayWeather(cityName: trimmed) { [self] status, weatherData, message in
-            if status {
-                DispatchQueue.main.async { [self] in
-                    if let currentWeatherData = weatherData {
-                        updateLocationDetails(weatherData: currentWeatherData)
-                    }
-                }
-            }else {
-                AppUtils.Log(from: self, with: "\(String(describing: message))")
-            }
-        }
+        viewModel.fetchWeather(for: trimmed)
     }
     
     // MARK: - updateLOcationDetails
@@ -160,25 +156,9 @@ class WeatherViewController: UIViewController {
     //
     func fetchWeatherForecast(_ cityName:String){
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
-        OpenWeatherApiClient.fetchWeatherForecast(cityName: trimmed) { [self] status, weatherDataList, message in
-            handleWeatherForecastReponse(status: status, weatherDataList: weatherDataList, message: message)
-        }
+       viewModel.fetchWeather(for: trimmed)
     }
     
-    func handleWeatherForecastReponse(status:Bool, weatherDataList:[WeatherItemModel]?, message:String?){
-        if status {
-            DispatchQueue.main.async { [self] in
-                if let list = weatherDataList {
-                    updateLocationDetails(weatherData: list.first!)
-                    weatherForecastList.removeAll()
-                    weatherForecastList.append(contentsOf: list)
-                    tableView.reloadData()
-                }
-            }
-        }else {
-            AppUtils.Log(from: self, with: "\(String(describing: message))")
-        }
-    }
 }
 
 // MARK: - Location Manger Extention
@@ -192,12 +172,8 @@ extension WeatherViewController : CLLocationManagerDelegate {
             let long = location.coordinate.longitude
             print(lat)
             print(long)
-           // OpenWeatherApiClient.fetchWeatherForecast(latitude: lat, longitude: long) { [self] success, foreCastList, message in
-              //  handleWeatherForecastReponse(status: success, weatherDataList: foreCastList, message: message)
-           // }
-            print("Test: Fetching weather for current location...")
-//          viewModel.fetchWeather(lat: location.coordinate.latitude,
-//                                lon: location.coordinate.longitude)
+         print("Test: Fetching weather for current location...")
+          viewModel.fetchWeather(lat: location.coordinate.latitude,lon: location.coordinate.longitude)
         }
         
     }

@@ -29,6 +29,8 @@
 		E36D0D132EC9E439000BE5A2 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D122EC9E437000BE5A2 /* NetworkService.swift */; };
 		E36D0D152EC9E46C000BE5A2 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D142EC9E469000BE5A2 /* AppConfig.swift */; };
 		E36D0D172EC9F204000BE5A2 /* WeatherViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D162EC9F201000BE5A2 /* WeatherViewModel.swift */; };
+		E36D0D1D2ECA05A5000BE5A2 /* UIViewController+ErrorAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D1C2ECA05A0000BE5A2 /* UIViewController+ErrorAlert.swift */; };
+		E36D0D1F2ECA05D3000BE5A2 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D1E2ECA05D1000BE5A2 /* AppError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +59,8 @@
 		E36D0D122EC9E437000BE5A2 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		E36D0D142EC9E469000BE5A2 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
 		E36D0D162EC9F201000BE5A2 /* WeatherViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewModel.swift; sourceTree = "<group>"; };
+		E36D0D1C2ECA05A0000BE5A2 /* UIViewController+ErrorAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ErrorAlert.swift"; sourceTree = "<group>"; };
+		E36D0D1E2ECA05D1000BE5A2 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
 		E3D768242EB54AB00058419C /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,6 +100,7 @@
 				E36D0D042EC9E09E000BE5A2 /* AppDelegates */,
 				E36D0D0A2EC9E20B000BE5A2 /* Features */,
 				E33E8F722AACA9AB00A78667 /* Constants */,
+				E36D0D182ECA0553000BE5A2 /* Common */,
 				E33E8F772AACAB8000A78667 /* Networking */,
 				E33E8F8C2AADC4F300A78667 /* Utils */,
 				E36D0D092EC9E1EF000BE5A2 /* Resources */,
@@ -135,6 +140,7 @@
 		E33E8F8C2AADC4F300A78667 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E36D0D1E2ECA05D1000BE5A2 /* AppError.swift */,
 				E33E8F8D2AADC51600A78667 /* AppUtils.swift */,
 			);
 			path = Utils;
@@ -254,6 +260,22 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		E36D0D182ECA0553000BE5A2 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E36D0D192ECA0572000BE5A2 /* Extensions */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		E36D0D192ECA0572000BE5A2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				E36D0D1C2ECA05A0000BE5A2 /* UIViewController+ErrorAlert.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -328,7 +350,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E36D0D1D2ECA05A5000BE5A2 /* UIViewController+ErrorAlert.swift in Sources */,
 				E33E8F7C2AACADD400A78667 /* NetworkUtils.swift in Sources */,
+				E36D0D1F2ECA05D3000BE5A2 /* AppError.swift in Sources */,
 				E36D0D152EC9E46C000BE5A2 /* AppConfig.swift in Sources */,
 				E33E8F742AACA9D500A78667 /* ConstantsEnum.swift in Sources */,
 				E33E8F762AACAA4200A78667 /* NetworkUtilsEnum.swift in Sources */,

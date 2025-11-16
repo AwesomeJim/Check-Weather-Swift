@@ -34,7 +34,7 @@ class WeatherViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     /// Holds an error message to show to the user.
-    @Published var errorMessage: String?
+    @Published var errorMessage: AppError?
     
     // MARK: - 2. Dependency (The "How")
     
@@ -80,7 +80,7 @@ class WeatherViewModel: ObservableObject {
                 
             } catch {
                 // 6. If anything went wrong, store the error
-                self.errorMessage = error.localizedDescription
+                self.errorMessage = AppError(title: "An Error Occurred", message:error.localizedDescription)
                 self.isLoading = false
             }
         }
@@ -105,7 +105,7 @@ class WeatherViewModel: ObservableObject {
                 self.isLoading = false
                 
             } catch {
-                self.errorMessage = error.localizedDescription
+                self.errorMessage = AppError(title: "An Error Occurred", message: error.localizedDescription)
                 self.isLoading = false
             }
         }
