@@ -13,18 +13,11 @@ import SwiftUI
 
 class WeatherViewController: UIViewController {
     
-    @IBOutlet weak var conditionImageView: UIImageView!
-    @IBOutlet weak var temperatureLabel: UILabel!
-    @IBOutlet weak var cityLabel: UILabel!
     
-    @IBOutlet weak var currentTempLabel: UILabel!
-    @IBOutlet weak var miniTempLabel: UILabel!
-    @IBOutlet weak var highTempLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var searchTextField: UITextField!
     
     @IBOutlet weak var currentWeatherContainerView: UIView!
     
+    @IBOutlet weak var  searchBarContainerView: UIView!
     
     @IBOutlet weak var tableView: UITableView!
     
@@ -40,7 +33,7 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        searchTextField.delegate = self // report back to viewController via delegate callbacks
+        
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -55,10 +48,43 @@ class WeatherViewController: UIViewController {
         let networkService = NetworkService()
         viewModel = WeatherViewModel(networkService: networkService)
         setupBindings()
+        setupSearchBarHosting()
         setupSwiftUIHosting()
         
     }
     
+    
+    private func setupSearchBarHosting() {
+        
+        // 1. Create your new SwiftUI view, passing in the
+        //    ViewModel this ViewController already owns.
+        let swiftUIView = SearchBarView(viewModel: viewModel)
+        
+        // 2. Create the "Bridge" controller
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        // 3. Add the hosting controller as a child
+        addChild(hostingController)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        // 4. Add the hosting controller's view to your container
+        searchBarContainerView.addSubview(hostingController.view)
+        
+        // 5. Pin it to the edges of the container
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: searchBarContainerView.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: searchBarContainerView.bottomAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: searchBarContainerView.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: searchBarContainerView.trailingAnchor)
+        ])
+        
+        // 6. Complete the bridge
+        hostingController.didMove(toParent: self)
+        
+        // 7. Make the hosting controller's background clear
+        //    so we can see the view controller's background
+        hostingController.view.backgroundColor = .clear
+    }
     
     private func setupSwiftUIHosting() {
         
@@ -148,16 +174,15 @@ class WeatherViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
-    }
-    
-    @IBAction func searchPressed(_ sender: UIButton) {
-        searchTextField.endEditing(true)
         
+        viewModel.locationRequested
+            .sink { [weak self] in
+                // The doorbell rang! Go get the location.
+                self?.locationManager.requestLocation()
+            }
+            .store(in: &cancellables)
     }
     
-    @IBAction func LocationPressed(_ sender: UIButton) {
-        locationManager.requestLocation()
-    }
     
     //-----------------------------------------------------------------
     // MARK: - Navigation
@@ -176,25 +201,6 @@ class WeatherViewController: UIViewController {
     func makeApiCall(_ cityName:String){
         let trimmed = cityName.trimmingCharacters(in: .whitespacesAndNewlines)
         viewModel.fetchWeather(for: trimmed)
-    }
-    
-    // MARK: - updateLOcationDetails
-    func updateLocationDetails(weatherData:WeatherItemModel){
-        temperatureLabel.text = weatherData.locationWeather.weatherTempIntString
-        AppUtils.Log(from: self, with: "weatherConditionSfIcon \(String(describing: weatherData.locationWeather.weatherConditionSfIcon))")
-        //let iconName = weatherData.locationWeather.weatherConditionSfIcon
-        // self.conditionImageView.image = UIImage(systemName:iconName)
-        cityLabel.text = weatherData.locationName
-        
-        currentTempLabel.text = WeatherUtils.formatTemperature(temperature:weatherData.locationWeather.weatherTemp)
-        
-        let miniTemp = weatherData.locationWeather.weatherTempMin
-        let highTemp = weatherData.locationWeather.weatherTempMax
-        
-        miniTempLabel.text = WeatherUtils.formatTemperature(temperature: miniTemp)
-        highTempLabel.text = WeatherUtils.formatTemperature(temperature: highTemp)
-        let date = weatherData.locationDate
-        dateLabel.text = AppUtils.formatDate(date)
     }
     
     //
@@ -224,38 +230,6 @@ extension WeatherViewController : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print(error)
-    }
-}
-
-// -------------------------------------------------------------------------
-// MARK: UITextField extention
-
-extension WeatherViewController :UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        searchTextField.endEditing(true)
-        return true
-    }
-    
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let cityName = searchTextField.text else {
-            searchTextField.placeholder = "Please type location"
-            return
-        }
-        print(cityName)
-        searchTextField.text = ""
-        makeApiCall(cityName)
-        fetchWeatherForecast(cityName)
-    }
-    
-    
-    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-        if textField.text != ""{
-            return true
-        }else {
-            searchTextField.placeholder = "Please type location"
-            return false
-        }
     }
 }
 

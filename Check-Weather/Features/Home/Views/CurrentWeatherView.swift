@@ -19,6 +19,7 @@ struct CurrentWeatherView: View {
         // 2. We put the content in a ZStack to add the
         //    blurred background and rounded corners.
         ZStack {
+            
             // 3. This is the "glassmorphic" background
             //    It's a semi-transparent blur.
             VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
@@ -26,11 +27,23 @@ struct CurrentWeatherView: View {
             
             // 4. We only show the content if we have weather data
             if let weather = viewModel.currentWeather {
-               
                 // 5. This is the main UI content, laid out
                 //    vertically.
-                VStack(alignment: .leading, spacing: 8) {
-                    
+                VStack(alignment: .center, spacing: 8) {
+                    HStack(spacing: 12) {
+                        Image(systemName: "mappin.and.ellipse")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                        
+                        Text(weather.locationName)
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        Spacer()
+                        Text(AppUtils.formatDate(weather.locationDate))
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                        
+                    }.padding()
                     // "Partly cloudy" & Icon
                     HStack {
                         // We use the 'currentIcon' from the VM
@@ -44,7 +57,6 @@ struct CurrentWeatherView: View {
                             ProgressView()
                                 .frame(width: 40, height: 40)
                         }
-                        
                         Text(weather.locationWeather.weatherConditionDescription.capitalized)
                             .font(.title2)
                             .fontWeight(.medium)
@@ -52,7 +64,7 @@ struct CurrentWeatherView: View {
                     
                     // "19°"
                     Text("\(weather.locationWeather.weatherTempIntString)°")
-                        .font(.system(size: 80, weight: .thin))
+                        .font(.system(size: 80, weight: .heavy))
                     
                     // "Feels like 22°"
                     Text("Feels like \(weather.locationWeather.feelsLikeIntString)°")
@@ -72,15 +84,15 @@ struct CurrentWeatherView: View {
                 ProgressView()
                     .scaleEffect(1.5)
             } // Check for a specific error message
-             else if let errorMessage = viewModel.errorMessage {
-                 VStack(spacing: 10) {
-                     Image(systemName: "exclamationmark.triangle")
-                         .font(.title)
-                         .foregroundColor(.yellow)
-                     Text(errorMessage.message)
-                         .foregroundColor(.white)
-                         .multilineTextAlignment(.center)
-                     .padding(.horizontal) }
+            else if let errorMessage = viewModel.errorMessage {
+                VStack(spacing: 10) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.title)
+                        .foregroundColor(.yellow)
+                    Text(errorMessage.message)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(.center)
+                    .padding(.horizontal) }
             }else {
                 // Fallback for errors or no data
                 Text("Failed to load weather")
@@ -174,7 +186,7 @@ struct CurrentWeatherView_Previews: PreviewProvider {
         vm.errorMessage = AppError(title: "An Error Occurred", message: "Failed to connect to server. Please try again.")
         return vm
     }
-
+    
     static var previews: some View {
         // We use a ZStack with a color to simulate
         // the background of your app
@@ -192,15 +204,15 @@ struct CurrentWeatherView_Previews: PreviewProvider {
                 .padding()
                 .previewDisplayName("Loaded State")
             
-//            // Preview 2: The "Loading" state
-//            CurrentWeatherView(viewModel: makeLoadingViewModel())
-//                .padding()
-//                .previewDisplayName("Loading State")
+            //            // Preview 2: The "Loading" state
+            //            CurrentWeatherView(viewModel: makeLoadingViewModel())
+            //                .padding()
+            //                .previewDisplayName("Loading State")
             
-//            // Preview 3: The "Error" state
-//            CurrentWeatherView(viewModel: makeErrorViewModel())
-//                .padding()
-//                .previewDisplayName("Error State")
+            //            // Preview 3: The "Error" state
+            //            CurrentWeatherView(viewModel: makeErrorViewModel())
+            //                .padding()
+            //                .previewDisplayName("Error State")
         }
     }
 }

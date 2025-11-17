@@ -42,6 +42,9 @@ class WeatherViewModel: ObservableObject {
     /// Stores [IconPath: DownloadedImage], e.g., ["10d": UIImage(...)]
     @Published var forecastIcons: [String: UIImage] = [:]
     
+    @Published var searchText :String = ""
+    
+    let locationRequested = PassthroughSubject<Void, Never>()
     
     // MARK: - 2. Dependency (The "How")
     
@@ -52,6 +55,16 @@ class WeatherViewModel: ObservableObject {
     /// We "inject" the network service when we create the ViewModel.
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
+    }
+    
+    
+    func searchButtonTapped() {
+        // We READ the value that the user's typing has set
+        guard !searchText.isEmpty else { return }
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        // We USE the value to run our logic
+        fetchWeather(for: trimmed)
+        self.searchText = ""
     }
     
     // MARK: - 4. Actions (Inputs)
