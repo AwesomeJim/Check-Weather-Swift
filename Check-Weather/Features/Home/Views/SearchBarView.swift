@@ -21,7 +21,7 @@ struct SearchBarView: View {
             }) {
                 Image(systemName: "location.fill")
                     .font(.title2)
-                    .foregroundColor(.primary)
+                    .foregroundColor(.white)
             }
             
             // 3. Search TextField

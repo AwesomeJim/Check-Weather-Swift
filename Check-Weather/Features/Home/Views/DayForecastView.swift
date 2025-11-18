@@ -14,7 +14,7 @@ struct DayForecastView: View {
     var body: some View {
         // 1. ZStack for the glass background
         ZStack {
-            VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+            VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
                 .cornerRadius(20)
             
             VStack(alignment: .leading, spacing: 16) {

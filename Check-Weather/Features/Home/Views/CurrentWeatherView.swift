@@ -22,7 +22,7 @@ struct CurrentWeatherView: View {
             
             // 3. This is the "glassmorphic" background
             //    It's a semi-transparent blur.
-            VisualEffectView(effect: UIBlurEffect(style: .systemThinMaterial))
+            VisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark))
                 .cornerRadius(20)
             
             // 4. We only show the content if we have weather data
@@ -37,11 +37,11 @@ struct CurrentWeatherView: View {
                         
                         Text(weather.locationName)
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.white)
                         Spacer()
                         Text(AppUtils.formatDate(weather.locationDate))
                             .font(.headline)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.white)
                         
                     }.padding()
                     // "Partly cloudy" & Icon
