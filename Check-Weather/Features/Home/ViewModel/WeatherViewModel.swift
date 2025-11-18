@@ -181,9 +181,11 @@ class WeatherViewModel: ObservableObject {
     /// Fetches all unique icons for the current forecast list.
     func fetchIconsForForecast() {
         
+        // We only proceed if we have hourly data
+        guard !hourlyForecast.isEmpty else { return }
         // 1. Get all unique icon paths from the forecast
         //    (Using Set avoids downloading "10d" 5 times)
-        let allPaths = dailyForecast.map { $0.locationWeather.weatherConditionIcon }
+        let allPaths = hourlyForecast.map { $0.locationWeather.weatherConditionIcon }
         let uniquePaths = Set(allPaths)
         
         // 2. Clear old icons
