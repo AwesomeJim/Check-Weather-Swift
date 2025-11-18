@@ -14,18 +14,6 @@ import SwiftUI
 class WeatherViewController: UIViewController {
     
     
-    
-    @IBOutlet weak var currentWeatherContainerView: UIView!
-    
-    @IBOutlet weak var  searchBarContainerView: UIView!
-    
-    @IBOutlet weak var  forecastContainerView: UIView!
-    
-    @IBOutlet weak var  hourlyforecastContainerView: UIView!
-    
-    @IBOutlet weak var hourlyForecastContainerView: UIView!
-    
-    
     // MARK: Properties
     var weatherForecastList:[WeatherItemModel] = []
     
@@ -51,128 +39,35 @@ class WeatherViewController: UIViewController {
         let networkService = NetworkService()
         viewModel = WeatherViewModel(networkService: networkService)
         setupBindings()
-        setupSearchBarHosting()
-        setupSwiftUIHosting()
-        setupForecastHosting()
-        setupHourlyHosting()
+        setupMainSwiftUIHosting()
         
     }
     
-    private func setupHourlyHosting() {
-        let swiftUIView = HourlyForecastView(viewModel: viewModel)
+    private func setupMainSwiftUIHosting() {
+        // 1. Create the master view
+        let swiftUIView = WeatherMainView(viewModel: viewModel)
         let hostingController = UIHostingController(rootView: swiftUIView)
         
+        // 2. Add the hosting controller to the current view controller
         addChild(hostingController)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        // This tells the hosting view to demand its full size
-        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
-        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
-        hourlyForecastContainerView.addSubview(hostingController.view)
+        
+        // 3. Pin the hosting controller's view directly to the root view
+        view.addSubview(hostingController.view)
         
         NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: hourlyForecastContainerView.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: hourlyForecastContainerView.bottomAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: hourlyForecastContainerView.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: hourlyForecastContainerView.trailingAnchor)
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
         
         hostingController.didMove(toParent: self)
-        hostingController.view.backgroundColor = .clear
+        
+        // Ensure the background color is clear or the desired background color
+        // (The SwiftUI view will now control the scrolling and spacing perfectly)
     }
     
-    private func setupForecastHosting() {
-        let swiftUIView = DayForecastView(viewModel: viewModel)
-        let hostingController = UIHostingController(rootView: swiftUIView)
-        
-        addChild(hostingController)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        // This tells the hosting view to demand its full size
-        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
-        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
-        
-        forecastContainerView.addSubview(hostingController.view)
-        
-        NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: forecastContainerView.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: forecastContainerView.bottomAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: forecastContainerView.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: forecastContainerView.trailingAnchor)
-        ])
-        
-        hostingController.didMove(toParent: self)
-        hostingController.view.backgroundColor = .clear
-    }
-    
-    private func setupSearchBarHosting() {
-        
-        // 1. Create your new SwiftUI view, passing in the
-        //    ViewModel this ViewController already owns.
-        let swiftUIView = SearchBarView(viewModel: viewModel)
-        
-        // 2. Create the "Bridge" controller
-        let hostingController = UIHostingController(rootView: swiftUIView)
-        
-        // 3. Add the hosting controller as a child
-        addChild(hostingController)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        // This tells the hosting view to demand its full size
-        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
-        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
-        
-        // 4. Add the hosting controller's view to your container
-        searchBarContainerView.addSubview(hostingController.view)
-        
-        // 5. Pin it to the edges of the container
-        NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: searchBarContainerView.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: searchBarContainerView.bottomAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: searchBarContainerView.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: searchBarContainerView.trailingAnchor)
-        ])
-        
-        // 6. Complete the bridge
-        hostingController.didMove(toParent: self)
-        
-        // 7. Make the hosting controller's background clear
-        //    so we can see the view controller's background
-        hostingController.view.backgroundColor = .clear
-    }
-    
-    private func setupSwiftUIHosting() {
-        
-        // 1. Create your new SwiftUI view, passing in the
-        //    ViewModel this ViewController already owns.
-        let swiftUIView = CurrentWeatherView(viewModel: viewModel)
-        
-        // 2. Create the "Bridge" controller
-        let hostingController = UIHostingController(rootView: swiftUIView)
-        
-        // 3. Add the hosting controller as a child
-        addChild(hostingController)
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        
-        // This tells the hosting view to demand its full size
-        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
-        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
-        
-        // 4. Add the hosting controller's view to your container
-        currentWeatherContainerView.addSubview(hostingController.view)
-        
-        // 5. Pin it to the edges of the container
-        NSLayoutConstraint.activate([
-            hostingController.view.topAnchor.constraint(equalTo: currentWeatherContainerView.topAnchor),
-            hostingController.view.bottomAnchor.constraint(equalTo: currentWeatherContainerView.bottomAnchor),
-            hostingController.view.leadingAnchor.constraint(equalTo: currentWeatherContainerView.leadingAnchor),
-            hostingController.view.trailingAnchor.constraint(equalTo: currentWeatherContainerView.trailingAnchor)
-        ])
-        
-        // 6. Complete the bridge
-        hostingController.didMove(toParent: self)
-        
-        // 7. Make the hosting controller's background clear
-        //    so we can see the view controller's background
-        hostingController.view.backgroundColor = .clear
-    }
     
     
     private func setupBindings() {
@@ -206,35 +101,18 @@ class WeatherViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        //        viewModel.$forecast
-        //            .receive(on: DispatchQueue.main)
-        //            .sink { [weak self] forecast in
-        //                if !forecast.isEmpty {
-        //                    AppUtils.logInfo("Test: ViewModel forecast Data : \(forecast.count)")
-        //                    self?.weatherForecastList.removeAll()
-        //                    self?.weatherForecastList.append(contentsOf: forecast)
-        //
-        //                }
-        //            }
-        //            .store(in: &cancellables)
-        //
-        //
-        //        // This binding listens for the icons to be downloaded.
-        //        viewModel.$forecastIcons
-        //            .receive(on: DispatchQueue.main)
-        //            .sink { [weak self] icons in
-        //                // As icons stream in, the dictionary is updated.
-        //                // Just reload the table to show them.
-        //                if !icons.isEmpty {
-        //
-        //                }
-        //            }
-        //            .store(in: &cancellables)
-        
         viewModel.locationRequested
             .sink { [weak self] in
                 // The doorbell rang! Go get the location.
                 self?.locationManager.requestLocation()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.didTapForecastItem
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] weatherData in
+                // 2. Perform the UIKit Segue!
+                self?.performSegue(withIdentifier: "showDetails", sender: weatherData)
             }
             .store(in: &cancellables)
     }
@@ -289,46 +167,4 @@ extension WeatherViewController : CLLocationManagerDelegate {
     }
 }
 
-// -------------------------------------------------------------------------
-// MARK: - Table View Data Source extention
-
-extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.weatherForecastList.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherForecastCell", for: indexPath) as! WeatherForecastListCell
-        let forecastItem = viewModel.dailyForecast[indexPath.row]
-        cell.dateLabel.text = AppUtils.formatDate(forecastItem.locationDate)
-        
-        // Set the name and image
-        cell.weatherDescriptionLabel.text = forecastItem.locationWeather.weatherCondition
-        //let iconName = forecastItem.locationWeather.weatherConditionSfIcon
-        //
-        // 2. Get the icon path (e.g., "10d")
-        let iconPath = forecastItem.locationWeather.weatherConditionIcon
-        
-        // 3. Look up the downloaded image in the VM's dictionary
-        let iconImage = viewModel.forecastIcons[iconPath]
-        cell.weatherConditionIcon.image = iconImage
-        
-        let miniTemp = WeatherUtils.formatTemperature(temperature: forecastItem.locationWeather.weatherTempMin)
-        let highTemp = WeatherUtils.formatTemperature(temperature: forecastItem.locationWeather.weatherTempMax)
-        
-        cell.weatherTempMiniLabel.text = miniTemp
-        cell.weatherTemp.text = highTemp
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let weatherData = self.weatherForecastList[(indexPath as NSIndexPath).row]
-        performSegue(withIdentifier: "showDetails", sender: weatherData)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    
-}
 

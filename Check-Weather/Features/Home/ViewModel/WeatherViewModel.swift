@@ -58,6 +58,15 @@ class WeatherViewModel: ObservableObject {
         self.networkService = networkService
     }
     
+    /// Sends the WeatherItemModel when a forecast item is tapped.
+    let didTapForecastItem = PassthroughSubject<WeatherItemModel, Never>()
+    
+
+    /// This method is called by the SwiftUI view on tap.
+    func forecastItemTapped(item: WeatherItemModel) {
+        // Fires the signal, carrying the data model
+        didTapForecastItem.send(item)
+    }
     
     func searchButtonTapped() {
         // We READ the value that the user's typing has set

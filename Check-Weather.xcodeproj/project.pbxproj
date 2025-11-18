@@ -28,6 +28,7 @@
 		E353C8E22ECBA1E4005B2489 /* HourlyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E353C8E12ECBA1E2005B2489 /* HourlyForecastView.swift */; };
 		E353C8E42ECBA533005B2489 /* DayForecastItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E353C8E32ECBA52A005B2489 /* DayForecastItemView.swift */; };
 		E353C8E62ECCA503005B2489 /* DayForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E353C8E52ECCA4F7005B2489 /* DayForecastView.swift */; };
+		E353C8E82ECCD4A4005B2489 /* WeatherMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E353C8E72ECCD4A1005B2489 /* WeatherMainView.swift */; };
 		E36D0D112EC9E42E000BE5A2 /* NetworkServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D102EC9E42C000BE5A2 /* NetworkServiceProtocol.swift */; };
 		E36D0D132EC9E439000BE5A2 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D122EC9E437000BE5A2 /* NetworkService.swift */; };
 		E36D0D152EC9E46C000BE5A2 /* AppConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = E36D0D142EC9E469000BE5A2 /* AppConfig.swift */; };
@@ -65,6 +66,7 @@
 		E353C8E12ECBA1E2005B2489 /* HourlyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastView.swift; sourceTree = "<group>"; };
 		E353C8E32ECBA52A005B2489 /* DayForecastItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayForecastItemView.swift; sourceTree = "<group>"; };
 		E353C8E52ECCA4F7005B2489 /* DayForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayForecastView.swift; sourceTree = "<group>"; };
+		E353C8E72ECCD4A1005B2489 /* WeatherMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherMainView.swift; sourceTree = "<group>"; };
 		E36D0D102EC9E42C000BE5A2 /* NetworkServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkServiceProtocol.swift; sourceTree = "<group>"; };
 		E36D0D122EC9E437000BE5A2 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		E36D0D142EC9E469000BE5A2 /* AppConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfig.swift; sourceTree = "<group>"; };
@@ -261,6 +263,7 @@
 		E36D0D0E2EC9E2A7000BE5A2 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E353C8E72ECCD4A1005B2489 /* WeatherMainView.swift */,
 				E353C8E52ECCA4F7005B2489 /* DayForecastView.swift */,
 				E353C8E32ECBA52A005B2489 /* DayForecastItemView.swift */,
 				E353C8E12ECBA1E2005B2489 /* HourlyForecastView.swift */,
@@ -376,6 +379,7 @@
 				E36D0D1F2ECA05D3000BE5A2 /* AppError.swift in Sources */,
 				E353C8E02ECB9C82005B2489 /* HourlyForecastItemView.swift in Sources */,
 				E353C8E42ECBA533005B2489 /* DayForecastItemView.swift in Sources */,
+				E353C8E82ECCD4A4005B2489 /* WeatherMainView.swift in Sources */,
 				E36D0D152EC9E46C000BE5A2 /* AppConfig.swift in Sources */,
 				E33E8F742AACA9D500A78667 /* ConstantsEnum.swift in Sources */,
 				E33E8F762AACAA4200A78667 /* NetworkUtilsEnum.swift in Sources */,

@@ -40,7 +40,7 @@ struct DayForecastView: View {
                             let icon = viewModel.forecastIcons[item.locationWeather.weatherConditionIcon]
                             
                             // 6. Create the item view
-                            ForecastItemView(item: item, icon: icon)
+                            ForecastItemView(viewModel: viewModel, item: item, icon: icon)
                         }
                     }
                 }

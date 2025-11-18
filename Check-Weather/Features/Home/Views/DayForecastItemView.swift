@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ForecastItemView: View {
     
+    // ViewModel is now required to trigger the tap action
+    @ObservedObject var viewModel: WeatherViewModel
+    
     var item: WeatherItemModel
     var icon: UIImage?
     
@@ -51,5 +54,9 @@ struct ForecastItemView: View {
         .padding(.horizontal, 12)
         .background(Color.white.opacity(0.1)) // Subtle background for the card
         .cornerRadius(20)
+        .onTapGesture {
+                    // Call the ViewModel method, passing the tapped item
+                    viewModel.forecastItemTapped(item: item)
+                }
     }
 }
