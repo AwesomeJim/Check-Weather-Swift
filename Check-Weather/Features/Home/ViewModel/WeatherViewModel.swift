@@ -29,7 +29,8 @@ class WeatherViewModel: ObservableObject {
     @Published var currentWeather: WeatherItemModel?
     
     /// The 5-day forecast list.
-    @Published var forecast: [WeatherItemModel] = []
+    @Published var hourlyForecast: [WeatherItemModel] = []
+    @Published var dailyForecast: [WeatherItemModel] = []
     
     /// True when a network request is in progress.
     @Published var isLoading: Bool = false
@@ -77,7 +78,7 @@ class WeatherViewModel: ObservableObject {
         self.errorMessage = nil
         self.currentWeather = nil
         self.currentIcon = nil
-        self.forecast = []
+        self.dailyForecast = []
         
         // 2. 'Task' is how you start an async operation
         //    from a non-async function.
@@ -94,7 +95,11 @@ class WeatherViewModel: ObservableObject {
                 //    assign their results to our @Published properties.
                 //    This will automatically trigger the UI to update.
                 self.currentWeather = try await currentTask
-                self.forecast = try await forecastTask ?? []
+                
+                // Deconstruct the tuple
+                let (hourly, daily) = try await forecastTask
+                self.hourlyForecast = hourly
+                self.dailyForecast = daily
                 
                 self.fetchIcon()
                 self.fetchIconsForForecast()
@@ -116,7 +121,7 @@ class WeatherViewModel: ObservableObject {
         self.errorMessage = nil
         self.currentWeather = nil
         self.currentIcon = nil
-        self.forecast = []
+        self.dailyForecast = []
         
         Task {
             do {
@@ -125,7 +130,10 @@ class WeatherViewModel: ObservableObject {
                 async let forecastTask = networkService.getWeatherForecast(lat: lat, lon: lon)
                 
                 self.currentWeather = try await currentTask
-                self.forecast = try await forecastTask ?? []
+                // Deconstruct the tuple
+                let (hourly, daily) = try await forecastTask
+                self.hourlyForecast = hourly
+                self.dailyForecast = daily
                 
                 self.fetchIcon()
                 self.fetchIconsForForecast()
@@ -166,7 +174,7 @@ class WeatherViewModel: ObservableObject {
         
         // 1. Get all unique icon paths from the forecast
         //    (Using Set avoids downloading "10d" 5 times)
-        let allPaths = forecast.map { $0.locationWeather.weatherConditionIcon }
+        let allPaths = dailyForecast.map { $0.locationWeather.weatherConditionIcon }
         let uniquePaths = Set(allPaths)
         
         // 2. Clear old icons

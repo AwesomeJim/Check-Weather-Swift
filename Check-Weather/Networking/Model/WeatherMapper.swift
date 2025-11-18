@@ -30,7 +30,9 @@ struct WeatherMapper {
             weatherTempMax: response.main.tempMax,
             weatherPressure: response.main.pressure,
             weatherHumidity: response.main.humidity,
-            weatherWind: response.wind // This maps directly!
+            weatherWind: response.wind, // This maps directly!
+            visibility: response.visibility, // <-- ADD THIS
+            pop: nil
         )
         
         let utcTime = Date(timeIntervalSince1970: response.dt) // 2023-09-10 00:00:00 UTC
@@ -49,20 +51,67 @@ struct WeatherMapper {
     }
     
     /// Converts the API's 'ForecastResponse' into an array of 'WeatherItemModel'.
-    static func mapForecastResponse(response: ForecastResponse) -> [WeatherItemModel] {
+    static func mapForecastResponse(response: ForecastResponse) -> (hourly: [WeatherItemModel], daily: [WeatherItemModel]){
         
         // 1. Create the shared coordinates from the "city" object
         let coordinates = Coordinates(longitude: response.city.coord.lon,
                                       latitude: response.city.coord.lat)
         
-        var weatherList = [WeatherItemModel]()
+        //        var weatherList = [WeatherItemModel]()
+        //
+        //        for (_, forecastItem) in response.list.enumerated(){
+        //
+        //            // Get the first weather condition, or use defaults
+        //            let weather = forecastItem.weather.first
+        //
+        //            // 3. Create the WeatherStatus for this 3-hour slice
+        //            let weatherStatus = WeatherStatus(
+        //                weatherConditionId: weather?.id ?? 0,
+        //                weatherConditionIcon: weather?.icon ?? "01d",
+        //                weatherConditionDescription: weather?.description ?? "Unknown",
+        //                weatherTemp: forecastItem.main.temp,
+        //                weatherfeelsLike: forecastItem.main.feelsLike,
+        //                weatherTempMin: forecastItem.main.tempMin,
+        //                weatherTempMax: forecastItem.main.tempMax,
+        //                weatherPressure: forecastItem.main.pressure,
+        //                weatherHumidity: forecastItem.main.humidity,
+        //                weatherWind: forecastItem.wind,
+        //                visibility: forecastItem.visibility,
+        //                pop: forecastItem.pop
+        //            )
+        //            let utcTime = Date(timeIntervalSince1970: forecastItem.dt) // 2023-09-10 00:00:00 UTC
+        //            let locationWeatherDay = AppUtils.convertUTCToDayOfMonth(utcTime: utcTime)
+        //            // 4. Build the final WeatherItemModel for this slice
+        //            let weatherItemModel = WeatherItemModel(
+        //                locationName: response.city.name, // Use city name for all
+        //                locationId: response.city.id,     // Use city ID for all
+        //                locationDate: forecastItem.dt,    // Use the item's timestamp
+        //                locationCoordinates: coordinates, // Use shared coordinates
+        //                locationWeather: weatherStatus,
+        //                locationWeatherDay: locationWeatherDay
+        //            )
+        //            let isDataOntheList = weatherList.contains(where: { $0.locationWeatherDay == locationWeatherDay })
+        //
+        //            //group the weather data by date
+        //            let groupeddata = Dictionary(grouping: weatherList,by: { $0.locationWeatherDay })
+        //
+        //            let today = AppUtils.getDayOfMonth()
+        //
+        //            if !isDataOntheList && locationWeatherDay != today {
+        //                weatherList.append(weatherItemModel)
+        //            }
+        //        }
+        //        return weatherList
+        let calendar = Calendar.current
+        let today = calendar.component(.day, from: Date())
         
-        for (_, forecastItem) in response.list.enumerated(){
+        // 1. Map ALL items (Hourly Data)
+        let allItems = response.list.map { forecastItem -> WeatherItemModel in
             
-            // Get the first weather condition, or use defaults
             let weather = forecastItem.weather.first
+            let date = Date(timeIntervalSince1970: forecastItem.dt)
+            let day = calendar.component(.day, from: date)
             
-            // 3. Create the WeatherStatus for this 3-hour slice
             let weatherStatus = WeatherStatus(
                 weatherConditionId: weather?.id ?? 0,
                 weatherConditionIcon: weather?.icon ?? "01d",
@@ -73,31 +122,35 @@ struct WeatherMapper {
                 weatherTempMax: forecastItem.main.tempMax,
                 weatherPressure: forecastItem.main.pressure,
                 weatherHumidity: forecastItem.main.humidity,
-                weatherWind: forecastItem.wind
+                weatherWind: forecastItem.wind,
+                visibility: forecastItem.visibility,
+                pop: forecastItem.pop
             )
-            let utcTime = Date(timeIntervalSince1970: forecastItem.dt) // 2023-09-10 00:00:00 UTC
-            let locationWeatherDay = AppUtils.convertUTCToDayOfMonth(utcTime: utcTime)
-            // 4. Build the final WeatherItemModel for this slice
-            let weatherItemModel = WeatherItemModel(
-                locationName: response.city.name, // Use city name for all
-                locationId: response.city.id,     // Use city ID for all
-                locationDate: forecastItem.dt,    // Use the item's timestamp
-                locationCoordinates: coordinates, // Use shared coordinates
+            
+            return WeatherItemModel(
+                locationName: response.city.name,
+                locationId: response.city.id,
+                locationDate: forecastItem.dt,
+                locationCoordinates: coordinates,
                 locationWeather: weatherStatus,
-                locationWeatherDay: locationWeatherDay
+                locationWeatherDay: day
             )
-            let isDataOntheList = weatherList.contains(where: { $0.locationWeatherDay == locationWeatherDay })
-            
-            //group the weather data by date
-            let groupeddata = Dictionary(grouping: weatherList,by: { $0.locationWeatherDay })
-            
-            let today = AppUtils.getDayOfMonth()
-            
-            if !isDataOntheList && locationWeatherDay != today {
-                weatherList.append(weatherItemModel)
+        }
+        
+        // 2. Filter for Daily Data (One per day, excluding today)
+        var dailyItems = [WeatherItemModel]()
+        
+        for item in allItems {
+            // If it's NOT today...
+            if item.locationWeatherDay != today {
+                // ...and we haven't added this day to the list yet
+                if !dailyItems.contains(where: { $0.locationWeatherDay == item.locationWeatherDay }) {
+                    dailyItems.append(item)
+                }
             }
         }
-        return weatherList
+        
+        return (hourly: allItems, daily: dailyItems)
     }
 
 }

@@ -10,10 +10,33 @@ import Foundation
 struct WeatherItemModel: Codable {
     let locationName: String
     let locationId: Int
-    let locationDate: Double
+    var locationDate: Double
     let locationCoordinates: Coordinates
     let locationWeather: WeatherStatus
     let locationWeatherDay: Int
+    
+    /// Formats the timestamp to a short day name, e.g., "Mon"
+    var dayOfWeek: String {
+        let date = Date(timeIntervalSince1970: locationDate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E" // "E" = Mon, "EEEE" = Monday
+        return formatter.string(from: date)
+    }
+    
+    /// Formats the timestamp to a short hour, e.g., "3 AM"
+    var hourOfDay: String {
+        let date = Date(timeIntervalSince1970: locationDate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "h a" // "h" = 3, "a" = AM/PM
+        return formatter.string(from: date).uppercased()
+    }
+    /// Formats the timestamp to Day/Month, e.g., "18/11"
+    var dayAndMonth: String {
+        let date = Date(timeIntervalSince1970: locationDate)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM" // dd = Day (18), MM = Month (11)
+        return formatter.string(from: date)
+    }
 }
 
 
@@ -36,6 +59,8 @@ struct WeatherStatus: Codable{
     let weatherPressure: Double
     let weatherHumidity: Int
     let weatherWind: Wind
+    let visibility: Int
+    let pop: Double? // Optional: current weather doesn't have this
     
     var weatherCondition: String {
         return WeatherUtils.getStringForWeatherCondition(weatherId: weatherConditionId)
@@ -60,6 +85,14 @@ struct WeatherStatus: Codable{
         let high = String(format: "%.0f", weatherTempMax)
         let low = String(format: "%.0f", weatherTempMin)
         return "High \(high)° • Low \(low)°"
+    }
+    
+    /// Formats the 'pop' value (0.0 to 1.0) as a percentage string, e.g., "15%"
+    var popString: String {
+        // Use 0% as a default if pop is nil
+        guard let pop = pop else { return "0%" }
+        let percent = Int(pop * 100)
+        return "\(percent)%"
     }
     
 }

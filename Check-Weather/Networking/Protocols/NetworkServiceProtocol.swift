@@ -14,13 +14,13 @@ protocol NetworkServiceProtocol {
     func getCurrentWeather(city: String) async throws -> WeatherItemModel?
     
     /// Fetches the 5-day weather forecast for a specific city.
-    func getWeatherForecast(city: String) async throws -> [WeatherItemModel]?
+    func getWeatherForecast(city: String) async throws -> (hourly: [WeatherItemModel], daily: [WeatherItemModel])
     
     /// Fetches the current weather for specific coordinates.
     func getCurrentWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> WeatherItemModel?
     
     /// Fetches the 5-day weather forecast for specific coordinates.
-    func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> [WeatherItemModel]?
+    func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> (hourly: [WeatherItemModel], daily: [WeatherItemModel])
     
     /// Fetches the raw image data for a given weather icon path.
     func downloadIcon(path: String) async throws -> Data

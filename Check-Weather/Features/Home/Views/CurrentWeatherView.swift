@@ -125,7 +125,7 @@ struct MockNetworkService: NetworkServiceProtocol {
         locationCoordinates: Coordinates(longitude: 36.8333, latitude: -1.1667),
         locationWeather: WeatherStatus(
             weatherConditionId: 803,
-            weatherConditionIcon: "04d",
+            weatherConditionIcon: "02d",
             weatherConditionDescription: "broken clouds",
             weatherTemp: 19.5,
             weatherfeelsLike: 18.9,
@@ -133,25 +133,105 @@ struct MockNetworkService: NetworkServiceProtocol {
             weatherTempMax: 24.0,
             weatherPressure: 1012,
             weatherHumidity: 60,
-            weatherWind: Wind(speed: 2.5, deg: 270)
+            weatherWind: Wind(speed: 2.5, deg: 270),
+            visibility: 1000,
+            pop: 0.15
         ),
         locationWeatherDay: AppUtils.convertUTCToDayOfMonth(utcTime: Date(timeIntervalSince1970: 1763305036))
     )
+    // MARK: - 2. Mock Forecast Tuple (The new requirement)
+    static var mockForecastTuple: (hourly: [WeatherItemModel], daily: [WeatherItemModel]) {
+        var hourlyItems = [WeatherItemModel]()
+        var dailyItems = [WeatherItemModel]()
+        
+        let baseTime = Date().timeIntervalSince1970
+        let coordinates = mockWeather.locationCoordinates
+        
+        // Generate 12 "Hourly" items (every 3 hours)
+        for i in 0..<12 {
+            let timeOffset = Double(i * 3 * 3600) // 3 hours in seconds
+            let date = Date(timeIntervalSince1970: baseTime + timeOffset)
+            let day = Calendar.current.component(.day, from: date)
+            
+            // Vary the temperature slightly
+            let temp = 20.0 + Double(i) + (i % 2 == 0 ? 1.0 : -1.0)
+            
+            // Create status with varied data
+            let status = WeatherStatus(
+                weatherConditionId: 801, // Few clouds
+                weatherConditionIcon: i > 6 ? "02n" : "02d", // Night icons after ~6pm
+                weatherConditionDescription: "Few Clouds",
+                weatherTemp: temp,
+                weatherfeelsLike: temp-1,
+                weatherTempMin: temp - 2,
+                weatherTempMax: temp + 2,
+                weatherPressure: 1012,
+                weatherHumidity: 50 + (i * 2),
+                weatherWind: Wind(speed: 4.0, deg: 180),
+                visibility: 10000,
+                pop: Double(i) * 0.05 // Increasing rain chance
+            )
+            
+            let item = WeatherItemModel(
+                locationName: "Cupertino",
+                locationId: 5341145,
+                locationDate: baseTime + timeOffset,
+                locationCoordinates: coordinates,
+                locationWeather: status,
+                locationWeatherDay: day
+            )
+            hourlyItems.append(item)
+        }
+        
+        // Generate 5 "Daily" items (every 24 hours)
+        for i in 1...5 {
+            let timeOffset = Double(i * 24 * 3600) // 24 hours
+            let date = Date(timeIntervalSince1970: baseTime + timeOffset)
+            let day = Calendar.current.component(.day, from: date)
+            
+            let status = WeatherStatus(
+                weatherConditionId: 500, // Light Rain
+                weatherConditionIcon: "10d",
+                weatherConditionDescription: "Light Rain",
+                weatherTemp: 18.0, // Daily average
+                weatherfeelsLike: 17.0,
+                weatherTempMin: 15.0,
+                weatherTempMax: 22.0,
+                weatherPressure: 1010,
+                weatherHumidity: 60,
+                weatherWind: Wind(speed: 5.0, deg: 160),
+                visibility: 8000,
+                pop: 0.4 // 40% chance
+            )
+            
+            let item = WeatherItemModel(
+                locationName: "Cupertino",
+                locationId: 5341145,
+                locationDate: baseTime + timeOffset,
+                locationCoordinates: coordinates,
+                locationWeather: status,
+                locationWeatherDay: day
+            )
+            dailyItems.append(item)
+        }
+        
+        return (hourly: hourlyItems, daily: dailyItems)
+    }
     
     func getCurrentWeather(city: String) async throws -> WeatherItemModel? {
         return MockNetworkService.mockWeather
     }
     
-    func getWeatherForecast(city: String) async throws -> [WeatherItemModel]?{
-        return [MockNetworkService.mockWeather]
+    func getWeatherForecast(city: String) async throws -> (hourly: [WeatherItemModel], daily: [WeatherItemModel]){
+        return MockNetworkService.mockForecastTuple
     }
     
     func getCurrentWeather(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> WeatherItemModel? {
         return MockNetworkService.mockWeather
     }
     
-    func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> [WeatherItemModel]? {
-        return [MockNetworkService.mockWeather]
+    func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> (hourly: [WeatherItemModel], daily: [WeatherItemModel]) {
+        return MockNetworkService.mockForecastTuple
     }
     
     func downloadIcon(path: String) async throws -> Data {

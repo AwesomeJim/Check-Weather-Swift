@@ -19,7 +19,12 @@ class WeatherViewController: UIViewController {
     
     @IBOutlet weak var  searchBarContainerView: UIView!
     
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var  forecastContainerView: UIView!
+    
+    @IBOutlet weak var  hourlyforecastContainerView: UIView!
+    
+    @IBOutlet weak var hourlyForecastContainerView: UIView!
+    
     
     // MARK: Properties
     var weatherForecastList:[WeatherItemModel] = []
@@ -34,8 +39,6 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        tableView.delegate = self
-        tableView.dataSource = self
         
         locationManager.delegate = self
         
@@ -50,9 +53,55 @@ class WeatherViewController: UIViewController {
         setupBindings()
         setupSearchBarHosting()
         setupSwiftUIHosting()
+        setupForecastHosting()
+        setupHourlyHosting()
         
     }
     
+    private func setupHourlyHosting() {
+        let swiftUIView = HourlyForecastView(viewModel: viewModel)
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        addChild(hostingController)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        // This tells the hosting view to demand its full size
+        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
+        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
+        hourlyForecastContainerView.addSubview(hostingController.view)
+        
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: hourlyForecastContainerView.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: hourlyForecastContainerView.bottomAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: hourlyForecastContainerView.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: hourlyForecastContainerView.trailingAnchor)
+        ])
+        
+        hostingController.didMove(toParent: self)
+        hostingController.view.backgroundColor = .clear
+    }
+    
+    private func setupForecastHosting() {
+        let swiftUIView = DayForecastView(viewModel: viewModel)
+        let hostingController = UIHostingController(rootView: swiftUIView)
+        
+        addChild(hostingController)
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        // This tells the hosting view to demand its full size
+        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
+        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
+        
+        forecastContainerView.addSubview(hostingController.view)
+        
+        NSLayoutConstraint.activate([
+            hostingController.view.topAnchor.constraint(equalTo: forecastContainerView.topAnchor),
+            hostingController.view.bottomAnchor.constraint(equalTo: forecastContainerView.bottomAnchor),
+            hostingController.view.leadingAnchor.constraint(equalTo: forecastContainerView.leadingAnchor),
+            hostingController.view.trailingAnchor.constraint(equalTo: forecastContainerView.trailingAnchor)
+        ])
+        
+        hostingController.didMove(toParent: self)
+        hostingController.view.backgroundColor = .clear
+    }
     
     private func setupSearchBarHosting() {
         
@@ -66,6 +115,9 @@ class WeatherViewController: UIViewController {
         // 3. Add the hosting controller as a child
         addChild(hostingController)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        // This tells the hosting view to demand its full size
+        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
+        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
         
         // 4. Add the hosting controller's view to your container
         searchBarContainerView.addSubview(hostingController.view)
@@ -98,6 +150,10 @@ class WeatherViewController: UIViewController {
         // 3. Add the hosting controller as a child
         addChild(hostingController)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        // This tells the hosting view to demand its full size
+        hostingController.view.setContentHuggingPriority(.required, for: .vertical)
+        hostingController.view.setContentCompressionResistancePriority(.required, for: .vertical)
         
         // 4. Add the hosting controller's view to your container
         currentWeatherContainerView.addSubview(hostingController.view)
@@ -150,30 +206,30 @@ class WeatherViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        viewModel.$forecast
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] forecast in
-                if !forecast.isEmpty {
-                    AppUtils.logInfo("Test: ViewModel forecast Data : \(forecast.count)")
-                    self?.weatherForecastList.removeAll()
-                    self?.weatherForecastList.append(contentsOf: forecast)
-                    self?.tableView.reloadData()
-                }
-            }
-            .store(in: &cancellables)
-        
-        
-        // This binding listens for the icons to be downloaded.
-        viewModel.$forecastIcons
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] icons in
-                // As icons stream in, the dictionary is updated.
-                // Just reload the table to show them.
-                if !icons.isEmpty {
-                    self?.tableView.reloadData()
-                }
-            }
-            .store(in: &cancellables)
+        //        viewModel.$forecast
+        //            .receive(on: DispatchQueue.main)
+        //            .sink { [weak self] forecast in
+        //                if !forecast.isEmpty {
+        //                    AppUtils.logInfo("Test: ViewModel forecast Data : \(forecast.count)")
+        //                    self?.weatherForecastList.removeAll()
+        //                    self?.weatherForecastList.append(contentsOf: forecast)
+        //
+        //                }
+        //            }
+        //            .store(in: &cancellables)
+        //
+        //
+        //        // This binding listens for the icons to be downloaded.
+        //        viewModel.$forecastIcons
+        //            .receive(on: DispatchQueue.main)
+        //            .sink { [weak self] icons in
+        //                // As icons stream in, the dictionary is updated.
+        //                // Just reload the table to show them.
+        //                if !icons.isEmpty {
+        //
+        //                }
+        //            }
+        //            .store(in: &cancellables)
         
         viewModel.locationRequested
             .sink { [weak self] in
@@ -244,7 +300,7 @@ extension WeatherViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "WeatherForecastCell", for: indexPath) as! WeatherForecastListCell
-        let forecastItem = viewModel.forecast[indexPath.row]
+        let forecastItem = viewModel.dailyForecast[indexPath.row]
         cell.dateLabel.text = AppUtils.formatDate(forecastItem.locationDate)
         
         // Set the name and image

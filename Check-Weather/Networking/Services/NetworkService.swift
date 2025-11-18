@@ -145,7 +145,7 @@ class NetworkService: NetworkServiceProtocol {
             )
     }
     
-    func getWeatherForecast(city: String) async throws -> [WeatherItemModel]? {
+    func getWeatherForecast(city: String) async throws -> (hourly: [WeatherItemModel], daily: [WeatherItemModel]) {
         return try await fetchAndMap(
                 url: Endpoints.forecastCity(city).url,
                 mapper: WeatherMapper.mapForecastResponse,
@@ -161,7 +161,7 @@ class NetworkService: NetworkServiceProtocol {
             )
     }
     
-    func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> [WeatherItemModel]?{
+    func getWeatherForecast(lat: CLLocationDegrees, lon: CLLocationDegrees) async throws -> (hourly: [WeatherItemModel], daily: [WeatherItemModel]){
         return try await fetchAndMap(
                 url: Endpoints.forecastCoordinates(lat: lat, lon: lon).url,
                 mapper: WeatherMapper.mapForecastResponse,

@@ -24,6 +24,8 @@ struct ForecastItem: Codable {
     let wind: Wind
     /// The timestamp (dt) for this forecast item
     let dt: Double
+    let visibility:Int
+    let pop: Double
 }
 
 // 3. The "city" object
