@@ -20,20 +20,20 @@ This app enable users to:
 
 # [Screenshots 📱](Screenshots/)
 
-|                            Home       (Dark Theme)                            |                           Home  (Light Theme)                            |
-|:-----------------------------------------------------------------------------:|:------------------------------------------------------------------------:|
-| <img src="Screenshots/Screenshot_home_dark.png" width="300px" height="600px"> | <img src="Screenshots/Screenshot_home.png" width="300px" height="600px"> |
+|                                 Light Theme                                 |                                                                                 |                                                                               |
+|:---------------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|-------------------------------------------------------------------------------|
+| <img src="Screenshots/swiftui/home_light.png" width="300px" height="600px"> | <img src="Screenshots/swiftui/home_light_two.png" width="300px" height="600px"> | <img src="Screenshots/swiftui/detail_light.png" width="300px" height="600px"> |
 
-|                            More Details (Dark Theme)                            |                               (Light Theme)                                |
-|:-------------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
-| <img src="Screenshots/Screenshot_detail_dark.png" width="300px" height="600px"> | <img src="Screenshots/Screenshot_detail.png" width="300px" height="600px"> |
+|                                 Dark Theme                                 |                                                                                |                                                                              |
+|:--------------------------------------------------------------------------:|:------------------------------------------------------------------------------:|------------------------------------------------------------------------------|
+| <img src="Screenshots/swiftui/home_dark.png" width="300px" height="600px"> | <img src="Screenshots/swiftui/home_dark_two.png" width="300px" height="600px"> | <img src="Screenshots/swiftui/detail_dark.png" width="300px" height="600px"> |
 
 
 ## Tech-stack used 🛠
-| **Tech Tools**                                           | **Usage/Purpose** |
-|----------------------------------------------------------|-------------------|
-| [Swift](https://www.swift.org/)                          | Language          |
-| [UIKit](https://developer.apple.com/documentation/uikit) | UI                |
+| **Tech Tools**                                  | **Usage/Purpose** |
+|-------------------------------------------------|-------------------|
+| [Swift](https://www.swift.org/)                 | Language          |
+| [SwiftUI](https://developer.apple.com/swiftui/) | UI                |
 
 ---
 ## Development Setup ⚙️ and Pre-requisite 📝
