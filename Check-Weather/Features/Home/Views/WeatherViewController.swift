@@ -112,7 +112,21 @@ class WeatherViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] weatherData in
                 // 2. Perform the UIKit Segue!
-                self?.performSegue(withIdentifier: "showDetails", sender: weatherData)
+                //self?.performSegue(withIdentifier: "showDetails", sender: weatherData)
+                // 1. Create the SwiftUI Detail View
+                let detailView = WeatherDetailView(weather: weatherData)
+                
+                // 2. Create a Hosting Controller for it
+                let hostingVC = UIHostingController(rootView: detailView)
+                
+                // 3. Present it modally (Sheet style)
+                if let sheet = hostingVC.sheetPresentationController {
+                    // This gives it the nice draggable handle
+                    sheet.detents = [.large()]
+                    sheet.prefersGrabberVisible = true
+                }
+                
+                self?.present(hostingVC, animated: true)
             }
             .store(in: &cancellables)
     }

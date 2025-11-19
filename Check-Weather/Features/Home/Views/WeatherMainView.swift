@@ -12,46 +12,14 @@ struct WeatherMainView: View {
     // The entire view observes the one source of truth
     @ObservedObject var viewModel: WeatherViewModel
     
-    // 1. Detect the current system color scheme
-    @Environment(\.colorScheme) var colorScheme
-    
-    // 2. Computed property that returns the correct background for the theme
-    var dynamicBackground: some View {
-        // Define Dark Mode Gradient
-        let darkGradient = LinearGradient(
-            gradient: Gradient(colors: [
-                Color(red: 0.1, green: 0.1, blue: 0.1), // Near Black/Dark Grey
-                Color(red: 0.05, green: 0.05, blue: 0.05) // Deeper Black/Grey
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        
-        // Define Light Mode Gradient
-        let lightGradient = LinearGradient(
-            gradient: Gradient(colors: [
-                Color(red: 0.2, green: 0.3, blue: 0.7),
-            ]),
-            startPoint: .top,
-            endPoint: .bottom
-        )
-        
-        // Return the correct gradient based on the environment
-        if colorScheme == .dark {
-            return darkGradient
-        } else {
-            // Use the blue theme for light mode to look more like a classic weather app
-            return lightGradient
-        }
-    }
     
     var body: some View {
         // 3. Wrap the ScrollView in a ZStack
         ZStack {
             
             // 4. Place the dynamic background in the back
-            dynamicBackground
-                .edgesIgnoringSafeArea(.all)
+            ThemeBackground()
+                           .edgesIgnoringSafeArea(.all)
             // 1. Master Scroll View (Replaces UIKit's ScrollView)
             ScrollView(.vertical, showsIndicators: false) {
                 
