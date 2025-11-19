@@ -32,6 +32,7 @@ struct ForecastItem: Codable {
 struct City: Codable {
     let id: Int
     let name: String
-    /// The 'coord' object (lat, lon)
     let coord: Coord
+    let sunrise: Double
+    let sunset: Double
 }

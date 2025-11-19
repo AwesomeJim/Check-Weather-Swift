@@ -135,7 +135,9 @@ struct MockNetworkService: NetworkServiceProtocol {
             weatherHumidity: 60,
             weatherWind: Wind(speed: 2.5, deg: 270),
             visibility: 1000,
-            pop: 0.15
+            pop: 0.15,
+            sunrise: 1678886400,
+            sunset: 1678933200 
         ),
         locationWeatherDay: AppUtils.convertUTCToDayOfMonth(utcTime: Date(timeIntervalSince1970: 1763305036))
     )
@@ -169,7 +171,9 @@ struct MockNetworkService: NetworkServiceProtocol {
                 weatherHumidity: 50 + (i * 2),
                 weatherWind: Wind(speed: 4.0, deg: 180),
                 visibility: 10000,
-                pop: Double(i) * 0.05 // Increasing rain chance
+                pop: Double(i) * 0.05, // Increasing rain chance
+                sunrise: 1678886400,
+                sunset: 1678933200
             )
             
             let item = WeatherItemModel(
@@ -201,7 +205,9 @@ struct MockNetworkService: NetworkServiceProtocol {
                 weatherHumidity: 60,
                 weatherWind: Wind(speed: 5.0, deg: 160),
                 visibility: 8000,
-                pop: 0.4 // 40% chance
+                pop: 0.4 ,// 40% chance
+                sunrise: 1678886400,
+                sunset: 1678933200
             )
             
             let item = WeatherItemModel(

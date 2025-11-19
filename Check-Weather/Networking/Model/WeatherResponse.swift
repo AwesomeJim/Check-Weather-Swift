@@ -17,6 +17,13 @@ struct WeatherResponse: Codable {
     let id: Int
     let name: String
     let visibility: Int
+    let sys: Sys
+}
+
+
+struct Sys: Codable {
+    let sunrise: Double
+    let sunset: Double
 }
 
 // 2. The 'coord' object

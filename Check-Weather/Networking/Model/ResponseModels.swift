@@ -60,7 +60,9 @@ struct WeatherStatus: Codable{
     let weatherHumidity: Int
     let weatherWind: Wind
     let visibility: Int
-    let pop: Double? // Optional: current weather doesn't have this
+    let pop: Double?
+    let sunrise: Double
+    let sunset: Double
     
     var weatherCondition: String {
         return WeatherUtils.getStringForWeatherCondition(weatherId: weatherConditionId)
@@ -93,6 +95,37 @@ struct WeatherStatus: Codable{
         guard let pop = pop else { return "0%" }
         let percent = Int(pop * 100)
         return "\(percent)%"
+    }
+    
+    var sunriseString: String {
+        return formatTime(sunrise)
+    }
+    
+    var sunsetString: String {
+        return formatTime(sunset)
+    }
+    
+    var pressureString: String {
+        return String(format: "%.0f hPa", weatherPressure)
+    }
+    
+    var humidityString: String {
+        return "\(weatherHumidity)%"
+    }
+    
+    var visibilityString: String {
+        // Convert meters to km (or miles)
+        let km = Double(visibility) / 1000.0
+        return String(format: "%.1f km", km)
+    }
+    
+    private func formatTime(_ timestamp: Double) -> String {
+        if timestamp == 0 { return "--:--" }
+        let date = Date(timeIntervalSince1970: timestamp)
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short // e.g., "6:13 AM"
+        return formatter.string(from: date)
     }
     
 }

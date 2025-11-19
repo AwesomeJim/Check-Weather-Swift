@@ -73,9 +73,13 @@ struct WeatherMainView: View {
                     // --- 5-Day Forecast ---
                     DayForecastView(viewModel: viewModel)
                         .padding(.horizontal)
-                        .padding(.bottom, 20) // Add padding at the bottom for scrolling clearance
+                        .padding(.bottom, 16) // Add padding at the bottom for scrolling clearance
                     
-                    // You can add other views here easily, like an About or Details card.
+                    if let weather = viewModel.currentWeather {
+                        WeatherDetailGrid(weather: weather)
+                            .padding(.horizontal)
+                            .padding(.bottom, 40) // Extra padding for scrolling
+                    }
                 }
                 // 3. Set the background color to match your target dark theme
                 .frame(maxWidth: .infinity)

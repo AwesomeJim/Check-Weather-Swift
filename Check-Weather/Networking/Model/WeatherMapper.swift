@@ -30,9 +30,11 @@ struct WeatherMapper {
             weatherTempMax: response.main.tempMax,
             weatherPressure: response.main.pressure,
             weatherHumidity: response.main.humidity,
-            weatherWind: response.wind, // This maps directly!
-            visibility: response.visibility, // <-- ADD THIS
-            pop: nil
+            weatherWind: response.wind,
+            visibility: response.visibility,
+            pop: nil,
+            sunrise: response.sys.sunrise,
+            sunset: response.sys.sunset
         )
         
         let utcTime = Date(timeIntervalSince1970: response.dt) // 2023-09-10 00:00:00 UTC
@@ -124,7 +126,9 @@ struct WeatherMapper {
                 weatherHumidity: forecastItem.main.humidity,
                 weatherWind: forecastItem.wind,
                 visibility: forecastItem.visibility,
-                pop: forecastItem.pop
+                pop: forecastItem.pop,
+                sunrise: response.city.sunrise,
+                sunset: response.city.sunset
             )
             
             return WeatherItemModel(
